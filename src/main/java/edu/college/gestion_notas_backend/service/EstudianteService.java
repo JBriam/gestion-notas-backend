@@ -1,0 +1,134 @@
+package edu.college.gestion_notas_backend.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import edu.college.gestion_notas_backend.model.Estudiante;
+import edu.college.gestion_notas_backend.model.Usuario;
+import edu.college.gestion_notas_backend.repository.EstudianteRepository;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class EstudianteService {
+    
+    private final EstudianteRepository estudianteRepository;
+    
+    // Crear estudiante
+    public Estudiante crearEstudiante(Estudiante estudiante) {
+        if (estudiante.getCodigoEstudiante() != null && 
+            estudianteRepository.existsByCodigoEstudiante(estudiante.getCodigoEstudiante())) {
+            throw new RuntimeException("El código de estudiante ya existe: " + estudiante.getCodigoEstudiante());
+        }
+        
+        return estudianteRepository.save(estudiante);
+    }
+    
+    // Obtener todos los estudiantes
+    @Transactional(readOnly = true)
+    public List<Estudiante> obtenerTodosLosEstudiantes() {
+        return estudianteRepository.findAll();
+    }
+    
+    // Obtener estudiante por ID
+    @Transactional(readOnly = true)
+    public Optional<Estudiante> obtenerEstudiantePorId(Integer id) {
+        return estudianteRepository.findById(id);
+    }
+    
+    // Obtener estudiante por código
+    @Transactional(readOnly = true)
+    public Optional<Estudiante> obtenerEstudiantePorCodigo(String codigo) {
+        return estudianteRepository.findByCodigoEstudiante(codigo);
+    }
+    
+    // Obtener estudiante por email
+    @Transactional(readOnly = true)
+    public Optional<Estudiante> obtenerEstudiantePorEmail(String email) {
+        return estudianteRepository.findByEmail(email);
+    }
+    
+    // Obtener estudiante por usuario
+    @Transactional(readOnly = true)
+    public Optional<Estudiante> obtenerEstudiantePorUsuario(Usuario usuario) {
+        return estudianteRepository.findByUsuario(usuario);
+    }
+    
+    // Obtener estudiante por ID de usuario
+    @Transactional(readOnly = true)
+    public Optional<Estudiante> obtenerEstudiantePorIdUsuario(Integer idUsuario) {
+        return estudianteRepository.findByUsuario_IdUsuario(idUsuario);
+    }
+    
+    // Buscar estudiantes por nombre
+    @Transactional(readOnly = true)
+    public List<Estudiante> buscarEstudiantesPorNombre(String nombre) {
+        return estudianteRepository.findByNombresOrApellidosContaining(nombre);
+    }
+    
+    // Obtener estudiantes por distrito
+    @Transactional(readOnly = true)
+    public List<Estudiante> obtenerEstudiantesPorDistrito(String distrito) {
+        return estudianteRepository.findByDistrito(distrito);
+    }
+    
+    // Actualizar estudiante
+    public Estudiante actualizarEstudiante(Integer id, Estudiante estudianteActualizado) {
+        Estudiante estudiante = estudianteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
+        
+        // Verificar si el nuevo código ya existe (excluyendo el estudiante actual)
+        if (estudianteActualizado.getCodigoEstudiante() != null &&
+            !estudianteActualizado.getCodigoEstudiante().equals(estudiante.getCodigoEstudiante()) &&
+            estudianteRepository.existsByCodigoEstudiante(estudianteActualizado.getCodigoEstudiante())) {
+            throw new RuntimeException("El código de estudiante ya existe: " + estudianteActualizado.getCodigoEstudiante());
+        }
+        
+        estudiante.setNombres(estudianteActualizado.getNombres());
+        estudiante.setApellidos(estudianteActualizado.getApellidos());
+        estudiante.setEmail(estudianteActualizado.getEmail());
+        estudiante.setTelefono(estudianteActualizado.getTelefono());
+        estudiante.setDistrito(estudianteActualizado.getDistrito());
+        estudiante.setFoto(estudianteActualizado.getFoto());
+        estudiante.setFechaNacimiento(estudianteActualizado.getFechaNacimiento());
+        estudiante.setCodigoEstudiante(estudianteActualizado.getCodigoEstudiante());
+        
+        return estudianteRepository.save(estudiante);
+    }
+    
+    // Actualizar perfil del estudiante (datos básicos)
+    public Estudiante actualizarPerfilEstudiante(Integer id, String telefono, String distrito, String foto) {
+        Estudiante estudiante = estudianteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
+        
+        if (telefono != null) estudiante.setTelefono(telefono);
+        if (distrito != null) estudiante.setDistrito(distrito);
+        if (foto != null) estudiante.setFoto(foto);
+        
+        return estudianteRepository.save(estudiante);
+    }
+    
+    // Eliminar estudiante
+    public void eliminarEstudiante(Integer id) {
+        if (!estudianteRepository.existsById(id)) {
+            throw new RuntimeException("Estudiante no encontrado con ID: " + id);
+        }
+        estudianteRepository.deleteById(id);
+    }
+    
+    // Obtener estadísticas por distrito
+    @Transactional(readOnly = true)
+    public List<Object[]> obtenerEstadisticasPorDistrito() {
+        return estudianteRepository.countStudentsByDistrito();
+    }
+    
+    // Generar código de estudiante automático
+    public String generarCodigoEstudiante() {
+        long count = estudianteRepository.count();
+        return String.format("EST%06d", count + 1);
+    }
+}
