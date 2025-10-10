@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/estudiantes")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class EstudianteController {
     
     private final EstudianteService estudianteService;

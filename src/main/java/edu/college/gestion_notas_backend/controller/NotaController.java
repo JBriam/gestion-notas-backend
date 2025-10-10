@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/notas")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class NotaController {
     
     private final NotaService notaService;
