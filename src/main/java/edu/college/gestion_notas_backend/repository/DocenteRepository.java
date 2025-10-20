@@ -14,6 +14,12 @@ import edu.college.gestion_notas_backend.model.Usuario;
 @Repository
 public interface DocenteRepository extends JpaRepository<Docente, Integer> {
     
+    // Verificar si existe por código de docente
+    boolean existsByCodigoDocente(String codigoDocente);
+    
+    // Buscar por código de docente
+    Optional<Docente> findByCodigoDocente(String codigoDocente);
+    
     // Buscar por usuario
     Optional<Docente> findByUsuario(Usuario usuario);
     

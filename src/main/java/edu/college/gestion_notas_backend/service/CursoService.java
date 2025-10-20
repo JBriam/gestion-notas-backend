@@ -112,8 +112,10 @@ public class CursoService {
         curso.setCodigoCurso(cursoActualizado.getCodigoCurso());
         curso.setDescripcion(cursoActualizado.getDescripcion());
         curso.setCreditos(cursoActualizado.getCreditos());
-        curso.setActivo(cursoActualizado.getActivo());
-        curso.setDocente(cursoActualizado.getDocente());
+        // No actualizamos 'activo' aquí - usar métodos específicos activar/desactivar
+        if (cursoActualizado.getDocente() != null) {
+            curso.setDocente(cursoActualizado.getDocente());
+        }
         
         return cursoRepository.save(curso);
     }

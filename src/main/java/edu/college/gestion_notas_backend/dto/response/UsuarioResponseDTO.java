@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 public class UsuarioResponseDTO {
     
     private Integer idUsuario;
-    private String username;
     private String email;
     private String rol;
     private Boolean activo;
