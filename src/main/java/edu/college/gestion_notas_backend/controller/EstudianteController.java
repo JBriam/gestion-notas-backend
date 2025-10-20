@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.college.gestion_notas_backend.dto.request.ActualizarEstudianteDTO;
 import edu.college.gestion_notas_backend.dto.request.ActualizarPerfilEstudianteDTO;
 import edu.college.gestion_notas_backend.dto.request.CrearEstudianteCompletoDTO;
 import edu.college.gestion_notas_backend.dto.request.CrearEstudianteDTO;
@@ -183,17 +184,8 @@ public class EstudianteController {
     @PutMapping("/{id}")
     public ResponseEntity<EstudianteResponseDTO> actualizarEstudiante(
             @PathVariable Integer id,
-            @Valid @RequestBody CrearEstudianteDTO estudianteDTO) {
+            @Valid @RequestBody ActualizarEstudianteDTO estudianteDTO) {
         try {
-            // Si se proporciona ID de usuario, asociarlo
-            Usuario usuario = null;
-            if (estudianteDTO.getIdUsuario() != null) {
-                Optional<Usuario> usuarioOpt = usuarioService.obtenerUsuarioPorId(estudianteDTO.getIdUsuario());
-                if (usuarioOpt.isPresent()) {
-                    usuario = usuarioOpt.get();
-                }
-            }
-
             Estudiante estudianteActualizado = Estudiante.builder()
                     .nombres(estudianteDTO.getNombres())
                     .apellidos(estudianteDTO.getApellidos())
@@ -203,7 +195,7 @@ public class EstudianteController {
                     .foto(estudianteDTO.getFoto())
                     .fechaNacimiento(estudianteDTO.getFechaNacimiento())
                     .codigoEstudiante(estudianteDTO.getCodigoEstudiante())
-                    .usuario(usuario)
+                    // ❌ NO establecer usuario - se mantiene el original
                     .build();
 
             Estudiante estudiante = estudianteService.actualizarEstudiante(id, estudianteActualizado);
