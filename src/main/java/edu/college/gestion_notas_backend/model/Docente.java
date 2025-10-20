@@ -28,8 +28,11 @@ public class Docente {
     private Integer idDocente;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario", nullable = false)
+    @JoinColumn(name = "id_usuario", nullable = false, unique = true)
     private Usuario usuario;
+
+    @Column(length = 20, unique = true)
+    private String codigoDocente;
 
     @Column(nullable = false, length = 100)
     private String nombres;
@@ -41,13 +44,25 @@ public class Docente {
     private String telefono;
 
     @Column(length = 100)
+    private String especialidad;
+
+    @Column(length = 200)
+    private String direccion;
+
+    @Column(length = 100)
     private String distrito;
 
     @Column(length = 255)
     private String foto;
-
-    @Column(length = 100)
-    private String especialidad;
-
+    
     private LocalDate fechaContratacion;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean activo = true;
+
+    // Método helper para obtener el correo
+    public String getEmail() {
+        return usuario != null ? usuario.getEmail() : null;
+    }
 }

@@ -16,15 +16,15 @@ public class EstudianteResponseDTO {
     private Integer idEstudiante;
     private String nombres;
     private String apellidos;
-    private String email;
     private String telefono;
+    private String direccion;
     private String distrito;
     private String foto;
     private LocalDate fechaNacimiento;
     private String codigoEstudiante;
     
     // Información básica del usuario asociado
-    private String username;
+    private String email;
     private String rolUsuario;
     private Boolean usuarioActivo;
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActualizarPerfilEstudianteDTO {
+public class ActualizarPerfilDocenteDTO {
 
     @Size(max = 50, message = "Los nombres no pueden exceder 50 caracteres")
     private String nombres;
@@ -30,7 +30,10 @@ public class ActualizarPerfilEstudianteDTO {
     @Size(max = 255, message = "La URL de la foto no puede exceder 255 caracteres")
     private String foto;
 
-    private LocalDate fechaNacimiento;
+    @Size(max = 100, message = "La especialidad no puede exceder 100 caracteres")
+    private String especialidad;
+
+    private LocalDate fechaContratacion;
 
     @Size(max = 100, message = "El email no puede exceder 100 caracteres")
     private String email;

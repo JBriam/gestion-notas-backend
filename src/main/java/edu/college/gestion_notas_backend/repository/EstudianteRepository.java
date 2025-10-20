@@ -17,9 +17,6 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Integer>
     // Buscar por código de estudiante
     Optional<Estudiante> findByCodigoEstudiante(String codigoEstudiante);
     
-    // Buscar por email
-    Optional<Estudiante> findByEmail(String email);
-    
     // Buscar por usuario
     Optional<Estudiante> findByUsuario(Usuario usuario);
     

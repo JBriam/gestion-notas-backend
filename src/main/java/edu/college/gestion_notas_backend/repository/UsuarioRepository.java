@@ -13,9 +13,6 @@ import edu.college.gestion_notas_backend.model.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     
-    // Buscar por username
-    Optional<Usuario> findByUsername(String username);
-    
     // Buscar por email
     Optional<Usuario> findByEmail(String email);
     
@@ -24,9 +21,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     
     // Buscar usuarios activos
     List<Usuario> findByActivoTrue();
-    
-    // Verificar si existe username
-    boolean existsByUsername(String username);
     
     // Verificar si existe email
     boolean existsByEmail(String email);

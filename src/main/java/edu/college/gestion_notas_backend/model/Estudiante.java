@@ -27,17 +27,24 @@ public class Estudiante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEstudiante;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", nullable = false, unique = true)
+    private Usuario usuario;
+
+    @Column(length = 20, unique = true)
+    private String codigoEstudiante;
+
     @Column(nullable = false, length = 100)
     private String nombres;
 
     @Column(nullable = false, length = 100)
     private String apellidos;
 
-    @Column(length = 100)
-    private String email;
-
     @Column(length = 20)
     private String telefono;
+
+    @Column(length = 200)
+    private String direccion;
 
     @Column(length = 100)
     private String distrito;
@@ -47,10 +54,13 @@ public class Estudiante {
 
     private LocalDate fechaNacimiento;
 
-    @Column(length = 20, unique = true)
-    private String codigoEstudiante;
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean activo = true;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario")
-    private Usuario usuario;
+    // Método helper para obtener el correo
+    public String getEmail() {
+        return usuario != null ? usuario.getEmail() : null;
+    }
+    
 }
