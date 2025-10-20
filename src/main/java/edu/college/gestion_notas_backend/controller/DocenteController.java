@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.college.gestion_notas_backend.dto.request.ActualizarDocenteDTO;
 import edu.college.gestion_notas_backend.dto.request.ActualizarPerfilDocenteDTO;
 import edu.college.gestion_notas_backend.dto.request.CrearDocenteCompletoDTO;
 import edu.college.gestion_notas_backend.dto.request.CrearDocenteDTO;
@@ -198,7 +199,7 @@ public class DocenteController {
     @PutMapping("/{id}")
     public ResponseEntity<DocenteResponseDTO> actualizarDocente(
             @PathVariable Integer id,
-            @Valid @RequestBody CrearDocenteDTO docenteDTO) {
+            @Valid @RequestBody ActualizarDocenteDTO docenteDTO) {
         try {
             Docente docenteActualizado = Docente.builder()
                     .nombres(docenteDTO.getNombres())
@@ -210,6 +211,7 @@ public class DocenteController {
                     .especialidad(docenteDTO.getEspecialidad())
                     .fechaContratacion(docenteDTO.getFechaContratacion())
                     .codigoDocente(docenteDTO.getCodigoDocente())
+                    // ❌ NO establecer usuario - se mantiene el original
                     .build();
 
             Docente docente = docenteService.actualizarDocente(id, docenteActualizado);
