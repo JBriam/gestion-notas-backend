@@ -5,9 +5,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,6 +26,7 @@ import edu.college.gestion_notas_backend.dto.response.EstudianteResponseDTO;
 import edu.college.gestion_notas_backend.model.Estudiante;
 import edu.college.gestion_notas_backend.model.Usuario;
 import edu.college.gestion_notas_backend.service.EstudianteService;
+import edu.college.gestion_notas_backend.service.FileStorageService;
 import edu.college.gestion_notas_backend.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +38,11 @@ public class EstudianteController {
 
     private final EstudianteService estudianteService;
     private final UsuarioService usuarioService;
+    private final FileStorageService fileStorageService;
 
-    @PostMapping("/completo")
+    @PostMapping(value = "/completo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<EstudianteResponseDTO> crearEstudianteCompleto(
-            @Valid @RequestBody CrearEstudianteCompletoDTO dto) {
+            @Valid @ModelAttribute CrearEstudianteCompletoDTO dto) {
         try {
             // 1. Crear usuario primero
             Usuario usuario = Usuario.builder()
@@ -55,7 +59,13 @@ public class EstudianteController {
                 codigo = estudianteService.generarCodigoEstudiante();
             }
 
-            // 3. Crear estudiante
+            // 3. Procesar la foto si existe
+            String rutaFoto = null;
+            if (dto.getFoto() != null && !dto.getFoto().isEmpty()) {
+                rutaFoto = fileStorageService.storeFile(dto.getFoto());
+            }
+
+            // 4. Crear estudiante
             Estudiante estudiante = Estudiante.builder()
                     .usuario(usuarioCreado)
                     .nombres(dto.getNombres())
@@ -64,7 +74,7 @@ public class EstudianteController {
                     .telefono(dto.getTelefono())
                     .direccion(dto.getDireccion())
                     .distrito(dto.getDistrito())
-                    .foto(dto.getFoto())
+                    .foto(rutaFoto)
                     .fechaNacimiento(dto.getFechaNacimiento())
                     .build();
 
