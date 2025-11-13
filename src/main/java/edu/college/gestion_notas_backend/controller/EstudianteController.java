@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.college.gestion_notas_backend.dto.request.ActualizarEstudianteDTO;
+import edu.college.gestion_notas_backend.dto.request.ActualizarEstudianteConFotoDTO;
 import edu.college.gestion_notas_backend.dto.request.ActualizarPerfilEstudianteDTO;
 import edu.college.gestion_notas_backend.dto.request.CrearEstudianteCompletoDTO;
 import edu.college.gestion_notas_backend.dto.request.CrearEstudianteDTO;
@@ -44,6 +45,14 @@ public class EstudianteController {
     public ResponseEntity<EstudianteResponseDTO> crearEstudianteCompleto(
             @Valid @ModelAttribute CrearEstudianteCompletoDTO dto) {
         try {
+            // Log para debug
+            System.out.println("=== Crear Estudiante Completo ===");
+            System.out.println("Email: " + dto.getEmail());
+            System.out.println("Nombres: " + dto.getNombres());
+            System.out.println("Apellidos: " + dto.getApellidos());
+            System.out.println("Teléfono: " + dto.getTelefono());
+            System.out.println("Foto: " + (dto.getFoto() != null ? dto.getFoto().getOriginalFilename() : "null"));
+            
             // 1. Crear usuario primero
             Usuario usuario = Usuario.builder()
                     .email(dto.getEmail())
@@ -52,17 +61,20 @@ public class EstudianteController {
                     .build();
 
             Usuario usuarioCreado = usuarioService.crearUsuario(usuario);
+            System.out.println("Usuario creado con ID: " + usuarioCreado.getIdUsuario());
 
             // 2. Generar código si no viene
             String codigo = dto.getCodigoEstudiante();
             if (codigo == null || codigo.trim().isEmpty()) {
                 codigo = estudianteService.generarCodigoEstudiante();
+                System.out.println("Código generado: " + codigo);
             }
 
             // 3. Procesar la foto si existe
             String rutaFoto = null;
             if (dto.getFoto() != null && !dto.getFoto().isEmpty()) {
                 rutaFoto = fileStorageService.storeFile(dto.getFoto());
+                System.out.println("Foto guardada en: " + rutaFoto);
             }
 
             // 4. Crear estudiante
@@ -79,11 +91,14 @@ public class EstudianteController {
                     .build();
 
             Estudiante estudianteCreado = estudianteService.crearEstudiante(estudiante);
+            System.out.println("Estudiante creado con ID: " + estudianteCreado.getIdEstudiante());
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(convertirADTO(estudianteCreado));
 
         } catch (RuntimeException e) {
+            System.err.println("Error al crear estudiante: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
@@ -190,12 +205,70 @@ public class EstudianteController {
         }
     }
 
-    // Actualizar estudiante completo
-    @PutMapping("/{id}")
+    // Actualizar estudiante completo (multipart con foto o sin foto)
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<EstudianteResponseDTO> actualizarEstudiante(
+            @PathVariable Integer id,
+            @ModelAttribute ActualizarEstudianteConFotoDTO estudianteDTO) {
+        try {
+            // Obtener estudiante actual
+            Estudiante estudianteActual = estudianteService.obtenerEstudiantePorId(id)
+                    .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
+
+            System.out.println("=== Actualizar Estudiante ===");
+            System.out.println("ID: " + id);
+            System.out.println("Nombres: " + estudianteDTO.getNombres());
+            System.out.println("Foto: " + (estudianteDTO.getFoto() != null ? estudianteDTO.getFoto().getOriginalFilename() : "null"));
+
+            // Procesar foto si existe
+            String rutaFoto = estudianteActual.getFoto(); // Mantener foto actual por defecto
+            if (estudianteDTO.getFoto() != null && !estudianteDTO.getFoto().isEmpty()) {
+                // Eliminar foto anterior si existe
+                if (rutaFoto != null && !rutaFoto.isEmpty()) {
+                    try {
+                        fileStorageService.deleteFile(rutaFoto);
+                        System.out.println("Foto anterior eliminada: " + rutaFoto);
+                    } catch (Exception e) {
+                        System.err.println("No se pudo eliminar foto anterior: " + rutaFoto);
+                    }
+                }
+                // Guardar nueva foto
+                rutaFoto = fileStorageService.storeFile(estudianteDTO.getFoto());
+                System.out.println("Nueva foto guardada en: " + rutaFoto);
+            }
+
+            // Construir estudiante actualizado
+            Estudiante estudianteActualizado = Estudiante.builder()
+                    .nombres(estudianteDTO.getNombres())
+                    .apellidos(estudianteDTO.getApellidos())
+                    .telefono(estudianteDTO.getTelefono())
+                    .direccion(estudianteDTO.getDireccion())
+                    .distrito(estudianteDTO.getDistrito())
+                    .foto(rutaFoto)
+                    .fechaNacimiento(estudianteDTO.getFechaNacimiento())
+                    .codigoEstudiante(estudianteDTO.getCodigoEstudiante())
+                    .build();
+
+            Estudiante estudiante = estudianteService.actualizarEstudiante(id, estudianteActualizado);
+            System.out.println("Estudiante actualizado con ID: " + estudiante.getIdEstudiante());
+            return ResponseEntity.ok(convertirADTO(estudiante));
+        } catch (RuntimeException e) {
+            System.err.println("Error al actualizar estudiante: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Actualizar estudiante sin foto (JSON)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<EstudianteResponseDTO> actualizarEstudianteSinFoto(
             @PathVariable Integer id,
             @Valid @RequestBody ActualizarEstudianteDTO estudianteDTO) {
         try {
+            System.out.println("=== Actualizar Estudiante (JSON) ===");
+            System.out.println("ID: " + id);
+            System.out.println("Nombres: " + estudianteDTO.getNombres());
+            
             Estudiante estudianteActualizado = Estudiante.builder()
                     .nombres(estudianteDTO.getNombres())
                     .apellidos(estudianteDTO.getApellidos())
@@ -205,12 +278,14 @@ public class EstudianteController {
                     .foto(estudianteDTO.getFoto())
                     .fechaNacimiento(estudianteDTO.getFechaNacimiento())
                     .codigoEstudiante(estudianteDTO.getCodigoEstudiante())
-                    // ❌ NO establecer usuario - se mantiene el original
                     .build();
 
             Estudiante estudiante = estudianteService.actualizarEstudiante(id, estudianteActualizado);
+            System.out.println("Estudiante actualizado (JSON) con ID: " + estudiante.getIdEstudiante());
             return ResponseEntity.ok(convertirADTO(estudiante));
         } catch (RuntimeException e) {
+            System.err.println("Error al actualizar estudiante (JSON): " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.notFound().build();
         }
     }
