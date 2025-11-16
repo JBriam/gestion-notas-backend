@@ -41,7 +41,7 @@ public class CrearDocenteCompletoDTO {
     @Size(max = 100, message = "El distrito no puede exceder 100 caracteres")
     private String distrito;
     
-    @Size(max = 255, message = "La URL de la foto no puede exceder 255 caracteres")
+    @Size(max = 100000, message = "La foto no puede exceder 100KB")
     private String foto;
     
     @Size(max = 100, message = "La especialidad no puede exceder 100 caracteres")
