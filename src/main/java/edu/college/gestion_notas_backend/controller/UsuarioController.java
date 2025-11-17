@@ -29,9 +29,16 @@ import edu.college.gestion_notas_backend.model.Usuario;
 import edu.college.gestion_notas_backend.service.DocenteService;
 import edu.college.gestion_notas_backend.service.EstudianteService;
 import edu.college.gestion_notas_backend.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Usuarios", description = "API para autenticación y gestión de usuarios del sistema")
 @RestController
 @RequestMapping("/usuarios")
 @RequiredArgsConstructor
@@ -41,7 +48,19 @@ public class UsuarioController {
     private final EstudianteService estudianteService;
     private final DocenteService docenteService;
 
-    // Login de usuario
+    @Operation(
+        summary = "Login de usuario",
+        description = "Autentica un usuario mediante email y contraseña. " +
+                     "Retorna información del usuario y su perfil asociado (estudiante o docente)."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Login exitoso",
+            content = @Content(schema = @Schema(implementation = LoginResponseDTO.class))),
+        @ApiResponse(responseCode = "401", description = "Credenciales incorrectas",
+            content = @Content),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor",
+            content = @Content)
+    })
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
         try {
@@ -84,7 +103,15 @@ public class UsuarioController {
         }
     }
 
-    // Crear usuario
+    @Operation(
+        summary = "Crear usuario",
+        description = "Crea un nuevo usuario en el sistema con un rol específico (ADMIN, DOCENTE, ESTUDIANTE)."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Rol inválido"),
+        @ApiResponse(responseCode = "409", description = "Email ya registrado")
+    })
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> crearUsuario(@Valid @RequestBody CrearUsuarioDTO crearUsuarioDTO) {
         try {
@@ -104,7 +131,15 @@ public class UsuarioController {
         }
     }
 
-    // Crear usuario con perfil completo (para el formulario de registro)
+    @Operation(
+        summary = "Registro completo de usuario",
+        description = "Crea un usuario y su perfil asociado (estudiante o docente) en una sola operación. " +
+                     "Ideal para formularios de registro público."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Usuario y perfil creados exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos o email ya existe")
+    })
     @PostMapping("/registro-completo")
     public ResponseEntity<?> crearUsuarioCompleto(@Valid @RequestBody RegistroCompletoDTO dto) {
         try {
@@ -186,6 +221,14 @@ public class UsuarioController {
     }
 
     // Obtener todos los usuarios
+    @Operation(
+        summary = "Obtener todos los usuarios",
+        description = "Recupera la lista completa de usuarios registrados."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuarios no encontrados")
+    })
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDTO>> obtenerTodosLosUsuarios() {
         List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
@@ -196,6 +239,14 @@ public class UsuarioController {
     }
 
     // Obtener usuario por ID
+    @Operation(
+        summary = "Obtener usuario por ID",
+        description = "Busca un usuario específico por su identificador."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuario encontrado"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> obtenerUsuarioPorId(@PathVariable Integer id) {
         Optional<Usuario> usuario = usuarioService.obtenerUsuarioPorId(id);
@@ -204,6 +255,14 @@ public class UsuarioController {
     }
 
     // Obtener usuarios por rol
+    @Operation(
+        summary = "Obtener usuarios por rol",
+        description = "Recupera todos los usuarios que tienen un rol específico."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuarios encontrados"),
+        @ApiResponse(responseCode = "404", description = "Usuarios no encontrados")
+    })
     @GetMapping("/rol/{rol}")
     public ResponseEntity<List<UsuarioResponseDTO>> obtenerUsuariosPorRol(@PathVariable String rol) {
         try {
@@ -219,6 +278,14 @@ public class UsuarioController {
     }
 
     // Obtener usuarios activos
+    @Operation(
+        summary = "Obtener usuarios activos",
+        description = "Recupera todos los usuarios que están activos."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuarios activos obtenidos exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuarios activos no encontrados")
+    })
     @GetMapping("/activos")
     public ResponseEntity<List<UsuarioResponseDTO>> obtenerUsuariosActivos() {
         List<Usuario> usuarios = usuarioService.obtenerUsuariosActivos();
@@ -229,6 +296,14 @@ public class UsuarioController {
     }
 
     // Desactivar usuario
+    @Operation(
+        summary = "Desactivar usuario",
+        description = "Desactiva un usuario específico."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuario desactivado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
     @PutMapping("/{id}/desactivar")
     public ResponseEntity<UsuarioResponseDTO> desactivarUsuario(@PathVariable Integer id) {
         try {
@@ -240,6 +315,14 @@ public class UsuarioController {
     }
 
     // Activar usuario
+    @Operation(
+        summary = "Activar usuario",
+        description = "Activa un usuario específico."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuario activado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
     @PutMapping("/{id}/activar")
     public ResponseEntity<UsuarioResponseDTO> activarUsuario(@PathVariable Integer id) {
         try {
@@ -251,6 +334,14 @@ public class UsuarioController {
     }
 
     // Eliminar usuario
+    @Operation(
+        summary = "Eliminar usuario",
+        description = "Elimina un usuario específico."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuario eliminado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Integer id) {
         try {
