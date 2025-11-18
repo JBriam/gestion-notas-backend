@@ -29,9 +29,17 @@ import edu.college.gestion_notas_backend.model.Usuario;
 import edu.college.gestion_notas_backend.service.EstudianteService;
 import edu.college.gestion_notas_backend.service.FileStorageService;
 import edu.college.gestion_notas_backend.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Estudiantes", description = "API para la gestión de estudiantes")
 @RestController
 @RequestMapping("/estudiantes")
 @RequiredArgsConstructor
@@ -40,8 +48,20 @@ public class EstudianteController {
     private final EstudianteService estudianteService;
     private final UsuarioService usuarioService;
     private final FileStorageService fileStorageService;
-
+    
+    @Operation(
+        summary = "Crear estudiante completo",
+        description = "Crea un nuevo estudiante junto con su usuario asociado en una sola operación. " +
+                     "Genera automáticamente el código de estudiante si no se proporciona."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Estudiante creado exitosamente",
+            content = @Content(schema = @Schema(implementation = EstudianteResponseDTO.class))),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos o email ya registrado",
+            content = @Content)
+    })
     @PostMapping(value = "/completo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    // @PostMapping("/completo")
     public ResponseEntity<EstudianteResponseDTO> crearEstudianteCompleto(
             @Valid @ModelAttribute CrearEstudianteCompletoDTO dto) {
         try {
@@ -103,7 +123,14 @@ public class EstudianteController {
         }
     }
 
-    // Crear estudiante
+    @Operation(
+        summary = "Crear estudiante",
+        description = "Crea un nuevo estudiante asociado a un usuario existente."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Estudiante creado exitosamente"),
+        @ApiResponse(responseCode = "409", description = "Conflicto - Código de estudiante duplicado")
+    })
     @PostMapping
     public ResponseEntity<EstudianteResponseDTO> crearEstudiante(
             @Valid @RequestBody CrearEstudianteDTO crearEstudianteDTO) {
@@ -135,7 +162,11 @@ public class EstudianteController {
         }
     }
 
-    // Obtener todos los estudiantes
+    @Operation(
+        summary = "Obtener todos los estudiantes",
+        description = "Recupera la lista completa de estudiantes registrados."
+    )
+    @ApiResponse(responseCode = "200", description = "Lista de estudiantes obtenida")
     @GetMapping
     public ResponseEntity<List<EstudianteResponseDTO>> obtenerTodosLosEstudiantes() {
         List<Estudiante> estudiantes = estudianteService.obtenerTodosLosEstudiantes();
@@ -145,15 +176,31 @@ public class EstudianteController {
         return ResponseEntity.ok(estudiantesDTO);
     }
 
-    // Obtener estudiante por ID
+    @Operation(
+        summary = "Obtener estudiante por ID",
+        description = "Busca un estudiante específico por su identificador."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Estudiante encontrado"),
+        @ApiResponse(responseCode = "404", description = "Estudiante no encontrado")
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<EstudianteResponseDTO> obtenerEstudiantePorId(@PathVariable Integer id) {
+    public ResponseEntity<EstudianteResponseDTO> obtenerEstudiantePorId(
+            @Parameter(description = "ID del estudiante", required = true) @PathVariable Integer id) {
         Optional<Estudiante> estudiante = estudianteService.obtenerEstudiantePorId(id);
         return estudiante.map(e -> ResponseEntity.ok(convertirADTO(e)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     // Obtener estudiante por código
+    @Operation(
+        summary = "Obtener estudiante por código",
+        description = "Recupera un estudiante específico utilizando su código único."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Estudiante encontrado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Estudiante no encontrado")
+    })
     @GetMapping("/codigo/{codigo}")
     public ResponseEntity<EstudianteResponseDTO> obtenerEstudiantePorCodigo(@PathVariable String codigo) {
         Optional<Estudiante> estudiante = estudianteService.obtenerEstudiantePorCodigo(codigo);
@@ -162,6 +209,14 @@ public class EstudianteController {
     }
 
     // Obtener estudiante por ID de usuario
+    @Operation(
+        summary = "Obtener estudiante por ID de usuario",
+        description = "Recupera un estudiante específico utilizando el ID de su usuario asociado."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Estudiante encontrado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Estudiante no encontrado")
+    })
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<EstudianteResponseDTO> obtenerEstudiantePorIdUsuario(@PathVariable Integer idUsuario) {
         Optional<Estudiante> estudiante = estudianteService.obtenerEstudiantePorIdUsuario(idUsuario);
@@ -170,6 +225,14 @@ public class EstudianteController {
     }
 
     // Buscar estudiantes por nombre
+    @Operation(
+        summary = "Buscar estudiantes por nombre",
+        description = "Busca estudiantes cuyo nombre coincida con el término proporcionado."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Estudiantes encontrados exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Estudiantes no encontrados")
+    })
     @GetMapping("/buscar")
     public ResponseEntity<List<EstudianteResponseDTO>> buscarEstudiantesPorNombre(@RequestParam String nombre) {
         List<Estudiante> estudiantes = estudianteService.buscarEstudiantesPorNombre(nombre);
@@ -180,6 +243,14 @@ public class EstudianteController {
     }
 
     // Obtener estudiantes por distrito
+    @Operation(
+        summary = "Obtener estudiantes por distrito",
+        description = "Recupera la lista de estudiantes que pertenecen a un distrito específico."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Estudiantes encontrados exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Estudiantes no encontrados")
+    })
     @GetMapping("/distrito/{distrito}")
     public ResponseEntity<List<EstudianteResponseDTO>> obtenerEstudiantesPorDistrito(@PathVariable String distrito) {
         List<Estudiante> estudiantes = estudianteService.obtenerEstudiantesPorDistrito(distrito);
@@ -189,10 +260,17 @@ public class EstudianteController {
         return ResponseEntity.ok(estudiantesDTO);
     }
 
-    // Actualizar perfil del estudiante
+    @Operation(
+        summary = "Actualizar perfil del estudiante",
+        description = "Actualiza información personal del estudiante incluyendo datos de contacto."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Perfil actualizado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Estudiante no encontrado")
+    })
     @PutMapping("/{id}/perfil")
     public ResponseEntity<EstudianteResponseDTO> actualizarPerfilEstudiante(
-            @PathVariable Integer id,
+            @Parameter(description = "ID del estudiante", required = true) @PathVariable Integer id,
             @Valid @RequestBody ActualizarPerfilEstudianteDTO perfilDTO) {
         try {
             Estudiante estudiante = estudianteService.actualizarPerfilEstudiante(
@@ -206,7 +284,18 @@ public class EstudianteController {
     }
 
     // Actualizar estudiante completo (multipart con foto o sin foto)
+    
+    // Actualizar estudiante completo
+    @Operation(
+        summary = "Actualizar un estudiante",
+        description = "Actualiza la información de un estudiante existente."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Estudiante actualizado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Estudiante no encontrado")
+    })
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    // @PutMapping("/{id}")
     public ResponseEntity<EstudianteResponseDTO> actualizarEstudiante(
             @PathVariable Integer id,
             @ModelAttribute ActualizarEstudianteConFotoDTO estudianteDTO) {
@@ -290,9 +379,17 @@ public class EstudianteController {
         }
     }
 
-    // Eliminar estudiante
+    @Operation(
+        summary = "Eliminar estudiante",
+        description = "Elimina permanentemente un estudiante del sistema."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Estudiante eliminado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Estudiante no encontrado")
+    })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarEstudiante(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminarEstudiante(
+            @Parameter(description = "ID del estudiante", required = true) @PathVariable Integer id) {
         try {
             estudianteService.eliminarEstudiante(id);
             return ResponseEntity.noContent().build();
@@ -302,6 +399,14 @@ public class EstudianteController {
     }
 
     // Obtener estadísticas por distrito
+    @Operation(
+        summary = "Obtener estadísticas por distrito",
+        description = "Recupera estadísticas de estudiantes agrupadas por distrito."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Estadísticas obtenidas exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Estadísticas no encontradas")
+    })
     @GetMapping("/estadisticas/distrito")
     public ResponseEntity<List<Object[]>> obtenerEstadisticasPorDistrito() {
         List<Object[]> estadisticas = estudianteService.obtenerEstadisticasPorDistrito();

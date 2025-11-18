@@ -25,9 +25,17 @@ import edu.college.gestion_notas_backend.model.Nota;
 import edu.college.gestion_notas_backend.service.CursoService;
 import edu.college.gestion_notas_backend.service.EstudianteService;
 import edu.college.gestion_notas_backend.service.NotaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Notas", description = "API para la gestión de calificaciones académicas")
 @RestController
 @RequestMapping("/notas")
 @RequiredArgsConstructor
@@ -37,7 +45,19 @@ public class NotaController {
     private final EstudianteService estudianteService;
     private final CursoService cursoService;
     
-    // Crear nota
+    @Operation(
+        summary = "Crear una nueva nota",
+        description = "Registra una calificación para un estudiante en un curso específico. " +
+                     "Incluye el tipo de evaluación y observaciones opcionales."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Nota creada exitosamente",
+            content = @Content(schema = @Schema(implementation = NotaResponseDTO.class))),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos o estudiante/curso no encontrado",
+            content = @Content),
+        @ApiResponse(responseCode = "409", description = "Conflicto al crear la nota",
+            content = @Content)
+    })
     @PostMapping
     public ResponseEntity<NotaResponseDTO> crearNota(@Valid @RequestBody CrearNotaDTO crearNotaDTO) {
         try {
@@ -68,6 +88,14 @@ public class NotaController {
     }
     
     // Obtener todas las notas
+    @Operation(
+        summary = "Obtener todas las notas",
+        description = "Recupera la lista completa de calificaciones registradas."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de notas obtenida exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Notas no encontradas")
+    })
     @GetMapping
     public ResponseEntity<List<NotaResponseDTO>> obtenerTodasLasNotas() {
         List<Nota> notas = notaService.obtenerTodasLasNotas();
@@ -78,6 +106,14 @@ public class NotaController {
     }
     
     // Obtener nota por ID
+    @Operation(
+        summary = "Obtener nota por ID",
+        description = "Busca una nota específica por su identificador."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Nota encontrada"),
+        @ApiResponse(responseCode = "404", description = "Nota no encontrada")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<NotaResponseDTO> obtenerNotaPorId(@PathVariable Integer id) {
         Optional<Nota> nota = notaService.obtenerNotaPorId(id);
@@ -85,9 +121,14 @@ public class NotaController {
                   .orElse(ResponseEntity.notFound().build());
     }
     
-    // Obtener notas por estudiante
+    @Operation(
+        summary = "Obtener notas por estudiante",
+        description = "Recupera todas las calificaciones de un estudiante específico."
+    )
+    @ApiResponse(responseCode = "200", description = "Lista de notas del estudiante")
     @GetMapping("/estudiante/{idEstudiante}")
-    public ResponseEntity<List<NotaResponseDTO>> obtenerNotasPorEstudiante(@PathVariable Integer idEstudiante) {
+    public ResponseEntity<List<NotaResponseDTO>> obtenerNotasPorEstudiante(
+            @Parameter(description = "ID del estudiante", required = true) @PathVariable Integer idEstudiante) {
         List<Nota> notas = notaService.obtenerNotasPorIdEstudiante(idEstudiante);
         List<NotaResponseDTO> notasDTO = notas.stream()
             .map(this::convertirADTO)
@@ -96,6 +137,14 @@ public class NotaController {
     }
     
     // Obtener notas por curso
+    @Operation(
+        summary = "Obtener notas por curso",
+        description = "Recupera todas las calificaciones de un curso específico."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de notas del curso"),
+        @ApiResponse(responseCode = "404", description = "Curso no encontrado")
+    })
     @GetMapping("/curso/{idCurso}")
     public ResponseEntity<List<NotaResponseDTO>> obtenerNotasPorCurso(@PathVariable Integer idCurso) {
         List<Nota> notas = notaService.obtenerNotasPorIdCurso(idCurso);
@@ -106,6 +155,14 @@ public class NotaController {
     }
     
     // Obtener notas por tipo de evaluación
+    @Operation(
+        summary = "Obtener notas por tipo de evaluación",
+        description = "Recupera todas las calificaciones de un tipo de evaluación específico."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de notas del tipo de evaluación"),
+        @ApiResponse(responseCode = "404", description = "Tipo de evaluación no encontrado")
+    })
     @GetMapping("/tipo/{tipoEvaluacion}")
     public ResponseEntity<List<NotaResponseDTO>> obtenerNotasPorTipo(@PathVariable String tipoEvaluacion) {
         try {
@@ -120,14 +177,27 @@ public class NotaController {
         }
     }
     
-    // Calcular promedio por estudiante
+    @Operation(
+        summary = "Calcular promedio por estudiante",
+        description = "Calcula el promedio general de todas las notas de un estudiante."
+    )
+    @ApiResponse(responseCode = "200", description = "Promedio calculado")
     @GetMapping("/promedio/estudiante/{idEstudiante}")
-    public ResponseEntity<Double> calcularPromedioPorEstudiante(@PathVariable Integer idEstudiante) {
+    public ResponseEntity<Double> calcularPromedioPorEstudiante(
+            @Parameter(description = "ID del estudiante", required = true) @PathVariable Integer idEstudiante) {
         Double promedio = notaService.calcularPromedioPorEstudiante(idEstudiante);
         return ResponseEntity.ok(promedio);
     }
     
     // Calcular promedio por curso
+    @Operation(
+        summary = "Calcular promedio por curso",
+        description = "Calcula el promedio general de todas las notas de un curso."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Promedio calculado"),
+        @ApiResponse(responseCode = "404", description = "Curso no encontrado")
+    })
     @GetMapping("/promedio/curso/{idCurso}")
     public ResponseEntity<Double> calcularPromedioPorCurso(@PathVariable Integer idCurso) {
         Double promedio = notaService.calcularPromedioPorCurso(idCurso);
@@ -135,6 +205,14 @@ public class NotaController {
     }
     
     // Calcular promedio por estudiante y curso
+    @Operation(
+        summary = "Calcular promedio por estudiante y curso",
+        description = "Calcula el promedio general de todas las notas de un estudiante en un curso específico."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Promedio calculado"),
+        @ApiResponse(responseCode = "404", description = "Estudiante o curso no encontrado")
+    })
     @GetMapping("/promedio/estudiante/{idEstudiante}/curso/{idCurso}")
     public ResponseEntity<Double> calcularPromedioPorEstudianteYCurso(
             @PathVariable Integer idEstudiante, 
@@ -143,16 +221,28 @@ public class NotaController {
         return ResponseEntity.ok(promedio);
     }
     
-    // Obtener estado académico
+    @Operation(
+        summary = "Obtener estado académico",
+        description = "Determina el estado académico de un estudiante en un curso (APROBADO/DESAPROBADO)."
+    )
+    @ApiResponse(responseCode = "200", description = "Estado académico obtenido")
     @GetMapping("/estado/estudiante/{idEstudiante}/curso/{idCurso}")
     public ResponseEntity<String> obtenerEstadoAcademico(
-            @PathVariable Integer idEstudiante, 
-            @PathVariable Integer idCurso) {
+            @Parameter(description = "ID del estudiante", required = true) @PathVariable Integer idEstudiante, 
+            @Parameter(description = "ID del curso", required = true) @PathVariable Integer idCurso) {
         String estado = notaService.obtenerEstadoAcademico(idEstudiante, idCurso);
         return ResponseEntity.ok(estado);
     }
     
     // Obtener notas aprobatorias
+    @Operation(
+        summary = "Obtener notas aprobatorias",
+        description = "Obtiene todas las notas que son consideradas aprobatorias."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Notas aprobatorias obtenidas exitosamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontraron notas aprobatorias")
+    })
     @GetMapping("/aprobatorias")
     public ResponseEntity<List<NotaResponseDTO>> obtenerNotasAprobatorias() {
         List<Nota> notas = notaService.obtenerNotasAprobatorias();
@@ -163,6 +253,14 @@ public class NotaController {
     }
     
     // Obtener mejores notas por curso
+    @Operation(
+        summary = "Obtener mejores notas por curso",
+        description = "Obtiene las mejores notas de un curso específico."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Mejores notas obtenidas exitosamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontraron notas para el curso especificado")
+    })
     @GetMapping("/mejores/curso/{idCurso}")
     public ResponseEntity<List<NotaResponseDTO>> obtenerMejoresNotasPorCurso(
             @PathVariable Integer idCurso, 
@@ -174,10 +272,17 @@ public class NotaController {
         return ResponseEntity.ok(notasDTO);
     }
     
-    // Actualizar nota
+    @Operation(
+        summary = "Actualizar nota",
+        description = "Modifica una calificación existente."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Nota actualizada exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Nota no encontrada")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<NotaResponseDTO> actualizarNota(
-            @PathVariable Integer id, 
+            @Parameter(description = "ID de la nota", required = true) @PathVariable Integer id, 
             @Valid @RequestBody ActualizarNotaDTO notaDTO) {
         try {
             Nota notaActualizada = Nota.builder()
@@ -194,6 +299,14 @@ public class NotaController {
     }
     
     // Eliminar nota
+    @Operation(
+        summary = "Eliminar nota",
+        description = "Elimina una calificación existente."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Nota eliminada exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Nota no encontrada")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarNota(@PathVariable Integer id) {
         try {
@@ -205,6 +318,14 @@ public class NotaController {
     }
     
     // Obtener estadísticas por tipo de evaluación
+    @Operation(
+        summary = "Obtener estadísticas por tipo de evaluación",
+        description = "Obtiene estadísticas agrupadas por tipo de evaluación."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Estadísticas obtenidas exitosamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontraron estadísticas")
+    })
     @GetMapping("/estadisticas/tipo")
     public ResponseEntity<List<Object[]>> obtenerEstadisticasPorTipo() {
         List<Object[]> estadisticas = notaService.obtenerEstadisticasPorTipoEvaluacion();

@@ -23,33 +23,38 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF para APIs REST
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilitar CORS
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sin sesiones (stateless API)
-            )
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // Permitir todas las requests por ahora
-            )
-            .formLogin(form -> form.disable()) // Deshabilitar login form (evita redirecciones)
-            .httpBasic(basic -> basic.disable()); // Deshabilitar HTTP Basic
-            
+                .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF para APIs REST
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilitar CORS
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sin sesiones (stateless API)
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll() // Permitir todas las requests por ahora
+                )
+                .formLogin(form -> form.disable()) // Deshabilitar login form (evita redirecciones)
+                .httpBasic(basic -> basic.disable()); // Deshabilitar HTTP Basic
+
         return http.build();
     }
-    
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000")); // Frontend URLs
+        // Permitir orígenes locales y producción
+        // ✅ ESPECIFICA TUS URLs EXACTAS
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://gestion-notas-frontend.onrender.com" // ⬅️ TU URL DE FRONTEND
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
