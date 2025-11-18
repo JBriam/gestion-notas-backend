@@ -31,7 +31,20 @@ public class FileStorageService {
         }
     }
 
+    /**
+     * Almacena un archivo en el directorio base
+     */
     public String storeFile(MultipartFile file) {
+        return storeFile(file, null);
+    }
+
+    /**
+     * Almacena un archivo en un subdirectorio específico
+     * @param file Archivo a almacenar
+     * @param subDirectory Subdirectorio donde guardar (ej: "estudiantes", "docentes")
+     * @return Solo el nombre del archivo (sin subdirectorio)
+     */
+    public String storeFile(MultipartFile file, String subDirectory) {
         try {
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             String fileExtension = "";
@@ -44,18 +57,46 @@ public class FileStorageService {
             // Generar nombre único para el archivo
             String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
             
-            Path targetLocation = this.fileStorageLocation.resolve(uniqueFileName);
+            // Determinar la ubicación de destino
+            Path targetLocation;
+            
+            if (subDirectory != null && !subDirectory.trim().isEmpty()) {
+                // Crear subdirectorio si no existe
+                Path subDirPath = this.fileStorageLocation.resolve(subDirectory);
+                Files.createDirectories(subDirPath);
+                
+                targetLocation = subDirPath.resolve(uniqueFileName);
+            } else {
+                targetLocation = this.fileStorageLocation.resolve(uniqueFileName);
+            }
+            
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
+            // Retornar solo el nombre del archivo
             return uniqueFileName;
         } catch (IOException ex) {
             throw new RuntimeException("No se pudo almacenar el archivo.", ex);
         }
     }
 
-    public void deleteFile(String fileName) {
+    /**
+     * Elimina un archivo del sistema
+     * @param fileName Nombre del archivo
+     * @param subDirectory Subdirectorio donde se encuentra (ej: "estudiantes", "docentes")
+     */
+    public void deleteFile(String fileName, String subDirectory) {
         try {
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            if (fileName == null || fileName.trim().isEmpty()) {
+                return;
+            }
+            
+            Path targetLocation;
+            if (subDirectory != null && !subDirectory.trim().isEmpty()) {
+                targetLocation = this.fileStorageLocation.resolve(subDirectory).resolve(fileName);
+            } else {
+                targetLocation = this.fileStorageLocation.resolve(fileName);
+            }
+            
             Files.deleteIfExists(targetLocation);
         } catch (IOException ex) {
             throw new RuntimeException("No se pudo eliminar el archivo.", ex);

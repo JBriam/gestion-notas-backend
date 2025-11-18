@@ -2,6 +2,8 @@ package edu.college.gestion_notas_backend.dto.request;
 
 import java.time.LocalDate;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -41,8 +43,7 @@ public class CrearDocenteCompletoDTO {
     @Size(max = 100, message = "El distrito no puede exceder 100 caracteres")
     private String distrito;
     
-    @Size(max = 100000, message = "La foto no puede exceder 100KB")
-    private String foto;
+    private MultipartFile foto;
     
     @Size(max = 100, message = "La especialidad no puede exceder 100 caracteres")
     private String especialidad;

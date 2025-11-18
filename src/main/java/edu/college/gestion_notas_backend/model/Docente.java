@@ -52,7 +52,7 @@ public class Docente {
     @Column(length = 100)
     private String distrito;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 255)
     private String foto;
     
     private LocalDate fechaContratacion;
