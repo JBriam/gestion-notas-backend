@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.college.gestion_notas_backend.dto.request.ActualizarEstudianteDTO;
 import edu.college.gestion_notas_backend.dto.request.ActualizarEstudianteConFotoDTO;
+import edu.college.gestion_notas_backend.dto.request.ActualizarEstudianteDTO;
 import edu.college.gestion_notas_backend.dto.request.ActualizarPerfilEstudianteDTO;
 import edu.college.gestion_notas_backend.dto.request.CrearEstudianteCompletoDTO;
 import edu.college.gestion_notas_backend.dto.request.CrearEstudianteDTO;
@@ -93,7 +93,7 @@ public class EstudianteController {
             // 3. Procesar la foto si existe
             String rutaFoto = null;
             if (dto.getFoto() != null && !dto.getFoto().isEmpty()) {
-                rutaFoto = fileStorageService.storeFile(dto.getFoto());
+                rutaFoto = fileStorageService.storeFile(dto.getFoto(), "estudiantes");
                 System.out.println("Foto guardada en: " + rutaFoto);
             }
 
@@ -315,14 +315,14 @@ public class EstudianteController {
                 // Eliminar foto anterior si existe
                 if (rutaFoto != null && !rutaFoto.isEmpty()) {
                     try {
-                        fileStorageService.deleteFile(rutaFoto);
+                        fileStorageService.deleteFile(rutaFoto, "estudiantes");
                         System.out.println("Foto anterior eliminada: " + rutaFoto);
                     } catch (Exception e) {
                         System.err.println("No se pudo eliminar foto anterior: " + rutaFoto);
                     }
                 }
                 // Guardar nueva foto
-                rutaFoto = fileStorageService.storeFile(estudianteDTO.getFoto());
+                rutaFoto = fileStorageService.storeFile(estudianteDTO.getFoto(), "estudiantes");
                 System.out.println("Nueva foto guardada en: " + rutaFoto);
             }
 
@@ -415,6 +415,12 @@ public class EstudianteController {
 
     // Método de conversión
     private EstudianteResponseDTO convertirADTO(Estudiante estudiante) {
+        // Construir URL completa de la foto si existe
+        String fotoUrl = null;
+        if (estudiante.getFoto() != null && !estudiante.getFoto().isEmpty()) {
+            fotoUrl = "/uploads/estudiantes/" + estudiante.getFoto();
+        }
+        
         return EstudianteResponseDTO.builder()
                 .idEstudiante(estudiante.getIdEstudiante())
                 .nombres(estudiante.getNombres())
@@ -422,7 +428,7 @@ public class EstudianteController {
                 .telefono(estudiante.getTelefono())
                 .direccion(estudiante.getDireccion())
                 .distrito(estudiante.getDistrito())
-                .foto(estudiante.getFoto())
+                .foto(fotoUrl)
                 .fechaNacimiento(estudiante.getFechaNacimiento())
                 .codigoEstudiante(estudiante.getCodigoEstudiante())
                 .email(estudiante.getUsuario().getEmail() != null ? estudiante.getUsuario().getEmail() : null)
