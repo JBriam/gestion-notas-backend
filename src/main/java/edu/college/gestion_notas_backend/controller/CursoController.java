@@ -58,10 +58,14 @@ public class CursoController {
     @PostMapping
     public ResponseEntity<CursoResponseDTO> crearCurso(@Valid @RequestBody CrearCursoDTO crearCursoDTO) {
         try {
+            String codigo = crearCursoDTO.getCodigoCurso() != null ? crearCursoDTO.getCodigoCurso() : cursoService.generarCodigoCurso();
+            Optional<Curso> cursoExistente = cursoService.obtenerCursoPorCodigo(codigo);
+            if (cursoExistente.isPresent()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
             Curso curso = Curso.builder()
                 .nombre(crearCursoDTO.getNombre())
-                .codigoCurso(crearCursoDTO.getCodigoCurso() != null ? 
-                    crearCursoDTO.getCodigoCurso() : cursoService.generarCodigoCurso())
+                .codigoCurso(codigo)
                 .descripcion(crearCursoDTO.getDescripcion())
                 .creditos(crearCursoDTO.getCreditos())
                 .build();

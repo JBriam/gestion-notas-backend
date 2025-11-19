@@ -47,4 +47,7 @@ public interface CursoRepository extends JpaRepository<Curso, Integer> {
     // Buscar cursos con más de X créditos
     @Query("SELECT c FROM Curso c WHERE c.creditos >= :minCreditos AND c.activo = true")
     List<Curso> findCursosWithMinCredits(@Param("minCreditos") Integer minCreditos);
+    
+        // Verificar si existe un curso con el mismo código y docente
+        boolean existsByCodigoCursoAndDocente_IdDocente(String codigoCurso, Integer idDocente);
 }
