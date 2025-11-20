@@ -27,37 +27,23 @@ import edu.college.gestion_notas_backend.service.EstudianteService;
 import edu.college.gestion_notas_backend.service.NotaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-
 @Tag(name = "Notas", description = "API para la gestión de calificaciones académicas")
 @RestController
 @RequestMapping("/notas")
-@RequiredArgsConstructor
 public class NotaController {
-    
     private final NotaService notaService;
     private final EstudianteService estudianteService;
     private final CursoService cursoService;
-    
-    @Operation(
-        summary = "Crear una nueva nota",
-        description = "Registra una calificación para un estudiante en un curso específico. " +
-                     "Incluye el tipo de evaluación y observaciones opcionales."
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Nota creada exitosamente",
-            content = @Content(schema = @Schema(implementation = NotaResponseDTO.class))),
-        @ApiResponse(responseCode = "400", description = "Datos inválidos o estudiante/curso no encontrado",
-            content = @Content),
-        @ApiResponse(responseCode = "409", description = "Conflicto al crear la nota",
-            content = @Content)
-    })
+
+    public NotaController(NotaService notaService, EstudianteService estudianteService, CursoService cursoService) {
+        this.notaService = notaService;
+        this.estudianteService = estudianteService;
+        this.cursoService = cursoService;
+    }
     @PostMapping
     public ResponseEntity<NotaResponseDTO> crearNota(@Valid @RequestBody CrearNotaDTO crearNotaDTO) {
         try {
@@ -101,7 +87,7 @@ public class NotaController {
         List<Nota> notas = notaService.obtenerTodasLasNotas();
         List<NotaResponseDTO> notasDTO = notas.stream()
             .map(this::convertirADTO)
-            .collect(Collectors.toList());
+            .toList();
         return ResponseEntity.ok(notasDTO);
     }
     
@@ -132,7 +118,7 @@ public class NotaController {
         List<Nota> notas = notaService.obtenerNotasPorIdEstudiante(idEstudiante);
         List<NotaResponseDTO> notasDTO = notas.stream()
             .map(this::convertirADTO)
-            .collect(Collectors.toList());
+            .toList();
         return ResponseEntity.ok(notasDTO);
     }
     
@@ -150,7 +136,7 @@ public class NotaController {
         List<Nota> notas = notaService.obtenerNotasPorIdCurso(idCurso);
         List<NotaResponseDTO> notasDTO = notas.stream()
             .map(this::convertirADTO)
-            .collect(Collectors.toList());
+            .toList();
         return ResponseEntity.ok(notasDTO);
     }
     
@@ -248,7 +234,7 @@ public class NotaController {
         List<Nota> notas = notaService.obtenerNotasAprobatorias();
         List<NotaResponseDTO> notasDTO = notas.stream()
             .map(this::convertirADTO)
-            .collect(Collectors.toList());
+            .toList();
         return ResponseEntity.ok(notasDTO);
     }
     
