@@ -24,6 +24,3 @@ dependency-reduced-pom.xml
 *.log
 logs/
 .fake
-
-### application properties ###
-/src/main/resources/application-dev.properties
