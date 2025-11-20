@@ -24,7 +24,12 @@ public class CursoService {
             cursoRepository.existsByCodigoCurso(curso.getCodigoCurso())) {
             throw new RuntimeException("El código de curso ya existe: " + curso.getCodigoCurso());
         }
-        
+        // Validación: no permitir el mismo docente en el mismo curso
+        if (curso.getCodigoCurso() != null && curso.getDocente() != null && curso.getDocente().getIdDocente() != null) {
+            if (cursoRepository.existsByCodigoCursoAndDocente_IdDocente(curso.getCodigoCurso(), curso.getDocente().getIdDocente())) {
+                throw new RuntimeException("Ya existe un curso con ese código y docente asignado.");
+            }
+        }
         // Establecer valores por defecto
         if (curso.getCreditos() == null) {
             curso.setCreditos(3);
@@ -32,7 +37,6 @@ public class CursoService {
         if (curso.getActivo() == null) {
             curso.setActivo(true);
         }
-        
         return cursoRepository.save(curso);
     }
     
