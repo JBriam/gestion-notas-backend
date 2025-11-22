@@ -62,64 +62,57 @@ public class DocenteController {
     @PostMapping(value = "/completo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DocenteResponseDTO> crearDocenteCompleto(
             @Valid @ModelAttribute CrearDocenteCompletoDTO dto) {
-        try {
-            // Log para debug
-            System.out.println("=== Crear Docente Completo ===");
-            System.out.println("Email: " + dto.getEmail());
-            System.out.println("Nombres: " + dto.getNombres());
-            System.out.println("Apellidos: " + dto.getApellidos());
-            System.out.println("Teléfono: " + dto.getTelefono());
-            System.out.println("Foto: " + (dto.getFoto() != null ? dto.getFoto().getOriginalFilename() : "null"));
-            
-            // 1. Crear usuario primero
-            Usuario usuario = Usuario.builder()
-                    .email(dto.getEmail())
-                    .password(dto.getPassword()) // Se encriptará en el servicio
-                    .rol(Usuario.Rol.DOCENTE)
-                    .build();
+        // Log para debug
+        System.out.println("=== Crear Docente Completo ===");
+        System.out.println("Email: " + dto.getEmail());
+        System.out.println("Nombres: " + dto.getNombres());
+        System.out.println("Apellidos: " + dto.getApellidos());
+        System.out.println("Teléfono: " + dto.getTelefono());
+        System.out.println("Foto: " + (dto.getFoto() != null ? dto.getFoto().getOriginalFilename() : "null"));
+        
+        // 1. Crear usuario primero
+        Usuario usuario = Usuario.builder()
+                .email(dto.getEmail())
+                .password(dto.getPassword()) // Se encriptará en el servicio
+                .rol(Usuario.Rol.DOCENTE)
+                .build();
 
-            Usuario usuarioCreado = usuarioService.crearUsuario(usuario);
-            System.out.println("Usuario creado con ID: " + usuarioCreado.getIdUsuario());
+        Usuario usuarioCreado = usuarioService.crearUsuario(usuario);
+        System.out.println("Usuario creado con ID: " + usuarioCreado.getIdUsuario());
 
-            // 2. Generar código si no viene
-            String codigo = dto.getCodigoDocente();
-            if (codigo == null || codigo.trim().isEmpty()) {
-                codigo = docenteService.generarCodigoDocente();
-                System.out.println("Código generado: " + codigo);
-            }
-
-            // 3. Procesar la foto si existe
-            String rutaFoto = null;
-            if (dto.getFoto() != null && !dto.getFoto().isEmpty()) {
-                rutaFoto = fileStorageService.storeFile(dto.getFoto(), "docentes");
-                System.out.println("Foto guardada en: " + rutaFoto);
-            }
-
-            // 4. Crear docente
-            Docente docente = Docente.builder()
-                    .usuario(usuarioCreado)
-                    .nombres(dto.getNombres())
-                    .apellidos(dto.getApellidos())
-                    .codigoDocente(codigo)
-                    .telefono(dto.getTelefono())
-                    .direccion(dto.getDireccion())
-                    .distrito(dto.getDistrito())
-                    .foto(rutaFoto)
-                    .especialidad(dto.getEspecialidad())
-                    .fechaContratacion(dto.getFechaContratacion())
-                    .build();
-
-            Docente docenteCreado = docenteService.crearDocente(docente);
-            System.out.println("Docente creado con ID: " + docenteCreado.getIdDocente());
-
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(convertirADTO(docenteCreado));
-
-        } catch (RuntimeException e) {
-            System.err.println("Error al crear docente: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+        // 2. Generar código si no viene
+        String codigo = dto.getCodigoDocente();
+        if (codigo == null || codigo.trim().isEmpty()) {
+            codigo = docenteService.generarCodigoDocente();
+            System.out.println("Código generado: " + codigo);
         }
+
+        // 3. Procesar la foto si existe
+        String rutaFoto = null;
+        if (dto.getFoto() != null && !dto.getFoto().isEmpty()) {
+            rutaFoto = fileStorageService.storeFile(dto.getFoto(), "docentes");
+            System.out.println("Foto guardada en: " + rutaFoto);
+        }
+
+        // 4. Crear docente
+        Docente docente = Docente.builder()
+                .usuario(usuarioCreado)
+                .nombres(dto.getNombres())
+                .apellidos(dto.getApellidos())
+                .codigoDocente(codigo)
+                .telefono(dto.getTelefono())
+                .direccion(dto.getDireccion())
+                .distrito(dto.getDistrito())
+                .foto(rutaFoto)
+                .especialidad(dto.getEspecialidad())
+                .fechaContratacion(dto.getFechaContratacion())
+                .build();
+
+        Docente docenteCreado = docenteService.crearDocente(docente);
+        System.out.println("Docente creado con ID: " + docenteCreado.getIdDocente());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(convertirADTO(docenteCreado));
     }
 
     @Operation(

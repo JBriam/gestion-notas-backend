@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.college.gestion_notas_backend.exception.EmailYaExisteException;
 import edu.college.gestion_notas_backend.model.Usuario;
 import edu.college.gestion_notas_backend.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class UsuarioService {
     // Crear usuario
     public Usuario crearUsuario(Usuario usuario) {
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
-            throw new RuntimeException("El email ya existe: " + usuario.getEmail());
+            throw new EmailYaExisteException(usuario.getEmail());
         }
 
         if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
@@ -79,7 +80,7 @@ public class UsuarioService {
         // Verificar si el nuevo email ya existe (excluyendo el usuario actual)
         if (!usuario.getEmail().equals(usuarioActualizado.getEmail()) &&
                 usuarioRepository.existsByEmail(usuarioActualizado.getEmail())) {
-            throw new RuntimeException("El email ya existe: " + usuarioActualizado.getEmail());
+            throw new EmailYaExisteException(usuarioActualizado.getEmail());
         }
 
         usuario.setEmail(usuarioActualizado.getEmail());
