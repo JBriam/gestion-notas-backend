@@ -1,19 +1,19 @@
-# 📘 Resumen: Documentación Swagger Implementada
+# Resumen: Documentación Swagger Implementada
 
-## ✅ Trabajo Completado
+## Trabajo Completado
 
 ### 1. Configuración de OpenAPI/Swagger
 
 #### SwaggerConfig.java
-- ✅ Configuración completa de OpenAPI 3.0
-- ✅ Información del proyecto (título, versión, descripción)
-- ✅ Información de contacto del equipo
-- ✅ Licencia MIT configurada
-- ✅ Servidores de desarrollo y producción definidos
+- Configuración completa de OpenAPI 3.0
+- Información del proyecto (título, versión, descripción)
+- Información de contacto del equipo
+- Licencia MIT configurada
+- Servidores de desarrollo y producción definidos
 
 ### 2. Controladores Documentados
 
-#### ✅ CursoController (`/cursos`)
+#### CursoController (`/cursos`)
 **Endpoints documentados:**
 - POST `/cursos` - Crear curso
 - GET `/cursos` - Obtener todos los cursos
@@ -33,7 +33,7 @@
 
 **Total:** 15 endpoints documentados
 
-#### ✅ DocenteController (`/docentes`)
+#### DocenteController (`/docentes`)
 **Endpoints documentados:**
 - POST `/docentes/completo` - Crear docente completo (usuario + perfil)
 - POST `/docentes` - Crear docente simple
@@ -51,7 +51,7 @@
 
 **Total:** 13 endpoints documentados
 
-#### ✅ EstudianteController (`/estudiantes`)
+#### EstudianteController (`/estudiantes`)
 **Endpoints documentados:**
 - POST `/estudiantes/completo` - Crear estudiante completo
 - POST `/estudiantes` - Crear estudiante simple
@@ -68,7 +68,7 @@
 
 **Total:** 12 endpoints documentados
 
-#### ✅ NotaController (`/notas`)
+#### NotaController (`/notas`)
 **Endpoints documentados:**
 - POST `/notas` - Crear nota
 - GET `/notas` - Obtener todas las notas
@@ -88,7 +88,7 @@
 
 **Total:** 15 endpoints documentados
 
-#### ✅ UsuarioController (`/usuarios`)
+#### UsuarioController (`/usuarios`)
 **Endpoints documentados:**
 - POST `/usuarios/login` - Autenticación de usuario
 - POST `/usuarios` - Crear usuario
@@ -107,7 +107,7 @@
 
 ---
 
-## 📊 Estadísticas Totales
+## Estadísticas Totales
 
 - **Controladores documentados:** 5
 - **Endpoints totales:** 67+
@@ -117,7 +117,7 @@
 
 ---
 
-## 🔧 Configuración Adicional
+## Configuración Adicional
 
 ### application.properties
 ```properties
@@ -135,7 +135,7 @@ springdoc.swagger-ui.try-it-out-enabled=true
 
 ---
 
-## 🌐 URLs de Acceso
+## URLs de Acceso
 
 ### Después de iniciar la aplicación:
 
@@ -156,7 +156,7 @@ springdoc.swagger-ui.try-it-out-enabled=true
 
 ---
 
-## 📚 Documentación Creada
+## Documentación Creada
 
 ### Archivos de Guía:
 
@@ -177,34 +177,34 @@ springdoc.swagger-ui.try-it-out-enabled=true
 
 ---
 
-## 🎯 Características Implementadas
+## Características Implementadas
 
 ### A nivel de API:
-- ✅ Información completa del proyecto
-- ✅ Contacto y licencia
-- ✅ Servidores múltiples (dev/prod)
-- ✅ Versionado de API
+- Información completa del proyecto
+- Contacto y licencia
+- Servidores múltiples (dev/prod)
+- Versionado de API
 
 ### A nivel de Controladores:
-- ✅ Tags descriptivos por módulo
-- ✅ Summaries concisos
-- ✅ Descriptions detalladas
-- ✅ Múltiples códigos de respuesta
-- ✅ Esquemas de request/response
-- ✅ Parámetros documentados
-- ✅ Ejemplos incluidos
+- Tags descriptivos por módulo
+- Summaries concisos
+- Descriptions detalladas
+- Múltiples códigos de respuesta
+- Esquemas de request/response
+- Parámetros documentados
+- Ejemplos incluidos
 
 ### Funcionalidades Swagger UI:
-- ✅ Búsqueda habilitada
-- ✅ Ordenamiento por método HTTP
-- ✅ Tags ordenados alfabéticamente
-- ✅ Try it out habilitado
-- ✅ Duración de peticiones visible
-- ✅ Modelos expandibles
+- Búsqueda habilitada
+- Ordenamiento por método HTTP
+- Tags ordenados alfabéticamente
+- Try it out habilitado
+- Duración de peticiones visible
+- Modelos expandibles
 
 ---
 
-## 🚀 Cómo Usar
+## Cómo Usar
 
 ### 1. Iniciar la aplicación
 ```bash
@@ -234,7 +234,7 @@ curl http://localhost:8080/api/v3/api-docs.yaml > openapi.yaml
 
 ---
 
-## 🔍 Extensión 42Crunch
+## Extensión 42Crunch
 
 ### Para qué sirve:
 
@@ -269,35 +269,35 @@ curl http://localhost:8080/api/v3/api-docs.yaml > openapi.yaml
 
 ---
 
-## ✨ Beneficios
+## Beneficios
 
 ### Para Desarrolladores Backend:
-- 📝 Documentación automática
-- 🔄 Siempre actualizada
-- 🧪 Pruebas integradas
-- ⚡ Desarrollo más rápido
+- Documentación automática
+- Siempre actualizada
+- Pruebas integradas
+- Desarrollo más rápido
 
 ### Para Desarrolladores Frontend:
-- 📖 Documentación clara
-- 🔌 Importación a Postman/Insomnia
-- 🤖 Generación de clientes automática
-- 🎯 Contratos API claros
+- Documentación clara
+- Importación a Postman/Insomnia
+- Generación de clientes automática
+- Contratos API claros
 
 ### Para QA/Testing:
-- ✅ Validación de respuestas
-- 🧪 Testing automatizado
-- 📊 Cobertura completa
-- 🔍 Especificaciones exactas
+- Validación de respuestas
+- Testing automatizado
+- Cobertura completa
+- Especificaciones exactas
 
 ### Para el Equipo:
-- 🤝 Mejor colaboración
-- 📚 Documentación centralizada
-- 🔄 Versionado de API
-- 🎓 Onboarding más fácil
+- Mejor colaboración
+- Documentación centralizada
+- Versionado de API
+- Onboarding más fácil
 
 ---
 
-## 🎉 Próximos Pasos
+## Próximos Pasos
 
 ### Recomendaciones:
 
@@ -328,7 +328,7 @@ curl http://localhost:8080/api/v3/api-docs.yaml > openapi.yaml
 
 ---
 
-## 📞 Soporte
+## Soporte
 
 Para más información, consulta:
 - `SWAGGER_DOCUMENTATION.md` - Guía completa
@@ -338,7 +338,7 @@ Para más información, consulta:
 
 ---
 
-## ✅ Checklist de Verificación
+## Checklist de Verificación
 
 - [x] SpringDoc dependencia agregada
 - [x] SwaggerConfig configurado
@@ -354,6 +354,6 @@ Para más información, consulta:
 
 ---
 
-**🎊 ¡Tu API está completamente documentada con Swagger!**
+**¡Tu API está completamente documentada con Swagger!**
 
 Ahora puedes compartirla con tu equipo, generar clientes automáticamente, y mantener una documentación siempre actualizada.

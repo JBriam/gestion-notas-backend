@@ -1,6 +1,6 @@
 # Configuración CORS - Sistema de Gestión de Notas
 
-## ✅ ¿Qué se ha configurado?
+## ¿Qué se ha configurado?
 
 ### 1. **CorsConfig.java** - Configuración principal
 - Permite comunicación con cualquier origen (desarrollo)
@@ -14,7 +14,7 @@
 - Headers expuestos para el frontend
 - Configuración más granular
 
-## 🚀 Configuraciones por tipo de Frontend
+## Configuraciones por tipo de Frontend
 
 ### **React (puerto 3000)**
 ```java
@@ -52,14 +52,14 @@ configuration.setAllowedOrigins(Arrays.asList(
 ));
 ```
 
-## 🔧 Configuración actual (Desarrollo)
+## Configuración actual (Desarrollo)
 
 ```java
 // Permite TODOS los orígenes - Solo para desarrollo
 configuration.setAllowedOriginPatterns(Arrays.asList("*"));
 ```
 
-## 🛡️ Configuración para Producción
+## Configuración para Producción
 
 ### **Ejemplo con múltiples dominios:**
 ```java
@@ -83,7 +83,7 @@ configuration.setExposedHeaders(Arrays.asList(
 ));
 ```
 
-## 📋 URLs de tu API
+## URLs de tu API
 
 Con `server.servlet.context-path=/api` en application.properties:
 
@@ -96,7 +96,7 @@ Con `server.servlet.context-path=/api` en application.properties:
 - **Cursos:** `GET /api/cursos`
 - **Notas:** `GET /api/notas`
 
-## 🧪 Pruebas desde Frontend
+## Pruebas desde Frontend
 
 ### **JavaScript/Fetch:**
 ```javascript
@@ -141,7 +141,7 @@ const getEstudiantes = async () => {
 };
 ```
 
-## 🔍 Verificar CORS
+## Verificar CORS
 
 ### **Herramientas de prueba:**
 1. **Postman** - Simula requests desde navegador
@@ -166,28 +166,28 @@ curl -X POST \
   http://localhost:8080/api/usuarios/login -v
 ```
 
-## ⚠️ Errores comunes y soluciones
+## Errores comunes y soluciones
 
 ### **Error: "CORS policy: No 'Access-Control-Allow-Origin'"**
-- ✅ Verifica que el origen está en `allowedOrigins`
-- ✅ Asegúrate que el servidor esté corriendo
-- ✅ Revisa que no haya múltiples configuraciones CORS
+- Verifica que el origen está en `allowedOrigins`
+- Asegúrate que el servidor esté corriendo
+- Revisa que no haya múltiples configuraciones CORS
 
 ### **Error: "CORS policy: The request client is not a secure context"**
-- ✅ Usa HTTPS en producción
-- ✅ Para desarrollo, usa `localhost` en lugar de IP
+- Usa HTTPS en producción
+- Para desarrollo, usa `localhost` en lugar de IP
 
 ### **Error: Preflight request failed**
-- ✅ Asegúrate que OPTIONS está en `allowedMethods`
-- ✅ Verifica que los headers están permitidos
+- Asegúrate que OPTIONS está en `allowedMethods`
+- Verifica que los headers están permitidos
 
-## 🚀 ¡Tu configuración está lista!
+## ¡Tu configuración está lista!
 
 Con la configuración actual puedes conectar tu frontend desde cualquier origen. 
 Recuerda cambiar a dominios específicos cuando vayas a producción por seguridad.
 
 ### **Próximos pasos:**
-1. ✅ Remover `@CrossOrigin` de los demás controladores
-2. ✅ Probar conexión desde tu frontend
-3. ✅ Ajustar orígenes específicos para producción
-4. ✅ Implementar autenticación JWT si es necesario
+1. Remover `@CrossOrigin` de los demás controladores
+2. Probar conexión desde tu frontend
+3. Ajustar orígenes específicos para producción
+4. Implementar autenticación JWT si es necesario

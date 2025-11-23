@@ -1,6 +1,6 @@
-# 🚀 Comandos Útiles - Swagger/OpenAPI
+# Comandos Útiles - Swagger/OpenAPI
 
-## 📥 Exportar Especificación OpenAPI
+## Exportar Especificación OpenAPI
 
 ### Windows (PowerShell)
 
@@ -34,7 +34,7 @@ curl http://localhost:8080/api/v3/api-docs.yaml -o docs/api/openapi.yaml
 
 ---
 
-## 🔍 Validar Especificación
+## Validar Especificación
 
 ### Con swagger-cli (Node.js)
 
@@ -62,7 +62,7 @@ java -jar openapi-generator-cli.jar validate -i openapi.yaml
 
 ---
 
-## 🤖 Generar Clientes
+## Generar Clientes
 
 ### JavaScript/TypeScript
 
@@ -130,7 +130,7 @@ openapi-generator-cli generate \
 
 ---
 
-## 🧪 Testing Automatizado
+## Testing Automatizado
 
 ### Con Dredd
 
@@ -186,7 +186,7 @@ public void testGetCursos() {
 
 ---
 
-## 🎨 Generar Documentación HTML
+## Generar Documentación HTML
 
 ### Con Redoc
 
@@ -222,7 +222,7 @@ npx http-server
 
 ---
 
-## 🔄 Comparar Versiones
+## Comparar Versiones
 
 ### Con oasdiff
 
@@ -242,7 +242,7 @@ oasdiff diff openapi-v1.json openapi-v2.json --format markdown > CHANGELOG.md
 
 ---
 
-## 🎭 Mock Server
+## Mock Server
 
 ### Con Prism (Stoplight)
 
@@ -272,7 +272,7 @@ mockoon-cli start --data openapi.json --port 3001
 
 ---
 
-## 📊 Análisis de Seguridad
+## Análisis de Seguridad
 
 ### Con 42Crunch Platform
 
@@ -301,7 +301,7 @@ zap-cli active-scan http://localhost:8080/api/
 
 ---
 
-## 📦 Publicar Documentación
+## Publicar Documentación
 
 ### GitHub Pages
 
@@ -333,7 +333,7 @@ swaggerhub api:create my-org/gestion-notas/1.0.0 -f openapi.yaml --published=pub
 
 ---
 
-## 🔧 Scripts Útiles
+## Scripts Útiles
 
 ### Script de actualización automática (Bash)
 
@@ -341,11 +341,11 @@ swaggerhub api:create my-org/gestion-notas/1.0.0 -f openapi.yaml --published=pub
 #!/bin/bash
 # update-openapi.sh
 
-echo "🔄 Actualizando especificación OpenAPI..."
+echo "Actualizando especificación OpenAPI..."
 
 # Esperar que el servidor esté disponible
 while ! curl -s http://localhost:8080/api/api-docs > /dev/null; do
-    echo "⏳ Esperando servidor..."
+    echo "Esperando servidor..."
     sleep 2
 done
 
@@ -360,7 +360,7 @@ swagger-cli validate docs/api/openapi.json
 # Generar HTML
 redoc-cli bundle docs/api/openapi.yaml -o docs/api/index.html
 
-echo "✅ Especificación actualizada correctamente"
+echo "Especificación actualizada correctamente"
 ```
 
 ### Script de actualización (PowerShell)
@@ -368,7 +368,7 @@ echo "✅ Especificación actualizada correctamente"
 ```powershell
 # update-openapi.ps1
 
-Write-Host "🔄 Actualizando especificación OpenAPI..." -ForegroundColor Cyan
+Write-Host "Actualizando especificación OpenAPI..." -ForegroundColor Cyan
 
 # Esperar que el servidor esté disponible
 $serverReady = $false
@@ -377,7 +377,7 @@ while (-not $serverReady) {
         $response = Invoke-WebRequest -Uri "http://localhost:8080/api/api-docs" -UseBasicParsing -TimeoutSec 2
         $serverReady = $true
     } catch {
-        Write-Host "⏳ Esperando servidor..." -ForegroundColor Yellow
+        Write-Host "Esperando servidor..." -ForegroundColor Yellow
         Start-Sleep -Seconds 2
     }
 }
@@ -399,12 +399,12 @@ if (Get-Command redoc-cli -ErrorAction SilentlyContinue) {
     redoc-cli bundle docs/api/openapi.yaml -o docs/api/index.html
 }
 
-Write-Host "✅ Especificación actualizada correctamente" -ForegroundColor Green
+Write-Host "Especificación actualizada correctamente" -ForegroundColor Green
 ```
 
 ---
 
-## 🎯 Pre-commit Hook
+## Pre-commit Hook
 
 ### Git Hook para validar OpenAPI
 
@@ -414,20 +414,20 @@ Write-Host "✅ Especificación actualizada correctamente" -ForegroundColor Gree
 
 # Verificar si existe el archivo OpenAPI
 if [ -f "docs/api/openapi.json" ]; then
-    echo "🔍 Validando especificación OpenAPI..."
+    echo "Validando especificación OpenAPI..."
     
     # Validar con swagger-cli
     if command -v swagger-cli &> /dev/null; then
         swagger-cli validate docs/api/openapi.json
         
         if [ $? -ne 0 ]; then
-            echo "❌ Especificación OpenAPI inválida"
+            echo "Especificación OpenAPI inválida"
             exit 1
         fi
         
-        echo "✅ Especificación OpenAPI válida"
+        echo "Especificación OpenAPI válida"
     else
-        echo "⚠️  swagger-cli no instalado, omitiendo validación"
+        echo "swagger-cli no instalado, omitiendo validación"
     fi
 fi
 
@@ -436,7 +436,7 @@ exit 0
 
 ---
 
-## 📝 GitHub Actions
+## GitHub Actions
 
 ### Workflow para validar OpenAPI
 
@@ -486,14 +486,14 @@ jobs:
 
 ---
 
-## 🎉 Todo Listo
+## Todo Listo
 
 Estos comandos te ayudarán a:
-- ✅ Exportar y validar tu especificación
-- ✅ Generar clientes en múltiples lenguajes
-- ✅ Crear servidores mock para desarrollo
-- ✅ Automatizar testing
-- ✅ Publicar documentación
-- ✅ Mantener calidad del código
+- Exportar y validar tu especificación
+- Generar clientes en múltiples lenguajes
+- Crear servidores mock para desarrollo
+- Automatizar testing
+- Publicar documentación
+- Mantener calidad del código
 
 ¡Guarda este archivo para referencia rápida!

@@ -92,6 +92,16 @@
             <version>4.0.0</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.49.1.0</version> <!-- O la versión más reciente -->
+        </dependency>
+        <!-- Dialecto de Hibernate para SQLite -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-community-dialects</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
