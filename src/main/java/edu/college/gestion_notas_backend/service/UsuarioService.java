@@ -122,7 +122,7 @@ public class UsuarioService {
     public boolean verificarCredenciales(String email, String password) {
         Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
         
-        // ✅ Usar passwordEncoder.matches() para verificar contraseñas encriptadas
+        // Usar passwordEncoder.matches() para verificar contraseñas encriptadas
         return usuario.isPresent() 
             && usuario.get().getActivo() 
             && passwordEncoder.matches(password, usuario.get().getPassword());

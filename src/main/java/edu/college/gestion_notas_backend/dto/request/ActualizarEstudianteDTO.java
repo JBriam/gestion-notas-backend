@@ -38,5 +38,5 @@ public class ActualizarEstudianteDTO {
     
     private LocalDate fechaNacimiento;
     
-    // ❌ NO incluir idUsuario - no se debe cambiar al actualizar
+    // NO incluir idUsuario - no se debe cambiar al actualizar
 }

@@ -1,12 +1,12 @@
 # Configuración React + Vite con Backend Spring Boot
 
-## ✅ CORS configurado para React + Vite (puerto 5173)
+## CORS configurado para React + Vite (puerto 5173)
 
-### 📍 **Configuración actualizada:**
+### **Configuración actualizada:**
 - **Frontend React**: `http://localhost:5173` (Vite)
 - **Backend Spring Boot**: `http://localhost:8080/api`
 
-## 🚀 Código para tu Frontend React
+## Código para tu Frontend React
 
 ### **1. Configuración de Axios (recomendado)**
 
@@ -332,7 +332,7 @@ export const useApi = (apiFunction, dependencies = []) => {
 };
 ```
 
-## 🧪 **Credenciales de Prueba**
+## **Credenciales de Prueba**
 
 ```javascript
 // Administrador
@@ -354,7 +354,7 @@ export const useApi = (apiFunction, dependencies = []) => {
 }
 ```
 
-## 🔧 **URLs de prueba en tu React**
+## **URLs de prueba en tu React**
 
 ```javascript
 // Ejemplos de peticiones
@@ -380,11 +380,11 @@ const testAPI = async () => {
 };
 ```
 
-## ✅ **Tu configuración está lista:**
+## **Tu configuración está lista:**
 
-- ✅ **CORS configurado** para `http://localhost:5173`
-- ✅ **Backend corriendo** en `http://localhost:8080/api`
-- ✅ **Servicios React** listos para usar
-- ✅ **Datos de prueba** disponibles
+- **CORS configurado** para `http://localhost:5173`
+- **Backend corriendo** en `http://localhost:8080/api`
+- **Servicios React** listos para usar
+- **Datos de prueba** disponibles
 
-¡Ahora puedes conectar tu React con el backend sin problemas de CORS! 🎉
+¡Ahora puedes conectar tu React con el backend sin problemas de CORS!

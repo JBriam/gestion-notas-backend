@@ -1,12 +1,12 @@
 # Documentación de Swagger/OpenAPI
 
-## 📚 Resumen
+## Resumen
 
 Tu API REST ahora está completamente documentada con **Swagger/OpenAPI 3.0** utilizando la biblioteca **SpringDoc OpenAPI**. Esto proporciona documentación interactiva, pruebas de endpoints en vivo y generación automática de esquemas.
 
 ---
 
-## 🚀 Acceso a la Documentación
+## Acceso a la Documentación
 
 ### Después de iniciar tu aplicación:
 
@@ -34,7 +34,7 @@ Tu API REST ahora está completamente documentada con **Swagger/OpenAPI 3.0** ut
 
 ---
 
-## 📖 Estructura de la Documentación
+## Estructura de la Documentación
 
 ### SwaggerConfig.java
 
@@ -92,7 +92,7 @@ Todos los controladores están organizados por etiquetas (Tags):
 
 ---
 
-## 🎯 Anotaciones Utilizadas
+## Anotaciones Utilizadas
 
 ### A nivel de clase:
 ```java
@@ -120,7 +120,7 @@ Todos los controladores están organizados por etiquetas (Tags):
 
 ---
 
-## 🔧 Extensión Swagger de 42Crunch en VS Code
+## Extensión Swagger de 42Crunch en VS Code
 
 ### ¿Para qué sirve?
 
@@ -186,7 +186,7 @@ springdoc.api-docs.version=OPENAPI_3_0
 
 ---
 
-## 🧪 Probar la API con Swagger UI
+## Probar la API con Swagger UI
 
 ### Pasos:
 
@@ -224,7 +224,7 @@ POST /api/cursos
 
 ---
 
-## 📦 Integración con Otras Herramientas
+## Integración con Otras Herramientas
 
 ### Postman/Insomnia:
 
@@ -254,7 +254,7 @@ openapi-generator-cli generate -i http://localhost:8080/api/v3/api-docs \
 
 ---
 
-## 🎨 Personalización Adicional
+## Personalización Adicional
 
 ### Configurar en application.properties:
 
@@ -295,7 +295,7 @@ public OpenAPI customOpenAPI() {
 
 ---
 
-## 📚 Recursos Adicionales
+## Recursos Adicionales
 
 - **SpringDoc OpenAPI**: https://springdoc.org/
 - **OpenAPI Specification**: https://swagger.io/specification/
@@ -304,7 +304,7 @@ public OpenAPI customOpenAPI() {
 
 ---
 
-## ✅ Checklist de Verificación
+## Checklist de Verificación
 
 - [x] Dependencia SpringDoc agregada al pom.xml
 - [x] SwaggerConfig.java configurado
@@ -317,7 +317,7 @@ public OpenAPI customOpenAPI() {
 
 ---
 
-## 🎉 ¡Listo!
+## ¡Listo!
 
 Tu API está completamente documentada. Ahora puedes:
 - Compartir la documentación con tu equipo

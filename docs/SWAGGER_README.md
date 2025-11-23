@@ -1,19 +1,19 @@
-# 🎯 Documentación API con Swagger - Guía Rápida
+# Documentación API con Swagger - Guía Rápida
 
-## 📚 Archivos de Documentación
+## Archivos de Documentación
 
 Tu proyecto ahora incluye documentación completa sobre Swagger/OpenAPI:
 
 | Archivo | Descripción |
 |---------|-------------|
-| **SWAGGER_SUMMARY.md** | ✅ Resumen ejecutivo de todo lo implementado |
-| **SWAGGER_DOCUMENTATION.md** | 📖 Guía completa de uso de Swagger/OpenAPI |
-| **42CRUNCH_GUIDE.md** | 🔧 Cómo usar la extensión 42Crunch en VS Code |
-| **SWAGGER_COMMANDS.md** | ⚡ Comandos útiles y scripts de automatización |
+| **SWAGGER_SUMMARY.md** | Resumen ejecutivo de todo lo implementado |
+| **SWAGGER_DOCUMENTATION.md** | Guía completa de uso de Swagger/OpenAPI |
+| **42CRUNCH_GUIDE.md** | Cómo usar la extensión 42Crunch en VS Code |
+| **SWAGGER_COMMANDS.md** | Comandos útiles y scripts de automatización |
 
 ---
 
-## 🚀 Inicio Rápido
+## Inicio Rápido
 
 ### 1. Inicia tu aplicación
 
@@ -30,16 +30,16 @@ http://localhost:8080/api/swagger-ui.html
 
 ### 3. Explora y prueba tu API
 
-- 📋 Ve todos los endpoints organizados por módulos
-- 🧪 Prueba cualquier endpoint con "Try it out"
-- 📊 Visualiza esquemas de request/response
-- 📝 Lee descripciones detalladas
+- Ve todos los endpoints organizados por módulos
+- Prueba cualquier endpoint con "Try it out"
+- Visualiza esquemas de request/response
+- Lee descripciones detalladas
 
 ---
 
-## 📖 ¿Qué se documentó?
+## ¿Qué se documentó?
 
-### ✅ Controladores Completos
+### Controladores Completos
 
 - **Cursos** - 15 endpoints
 - **Docentes** - 13 endpoints  
@@ -49,7 +49,7 @@ http://localhost:8080/api/swagger-ui.html
 
 **Total: 67+ endpoints completamente documentados**
 
-### ✅ Información incluida para cada endpoint
+### Información incluida para cada endpoint
 
 - Resumen (summary)
 - Descripción detallada
@@ -61,28 +61,28 @@ http://localhost:8080/api/swagger-ui.html
 
 ---
 
-## 🔍 Extensión 42Crunch
+## Extensión 42Crunch
 
 ### ¿Para qué sirve?
 
 La extensión **Swagger Viewer (42Crunch)** en VS Code te permite:
 
-#### 1. **Visualizar** 📺
+#### 1. **Visualizar**
 - Preview en tiempo real de archivos OpenAPI
 - Vista dividida (código + preview)
 - Navegación inteligente por la estructura
 
-#### 2. **Validar** ✅
+#### 2. **Validar**
 - Detecta errores de sintaxis
 - Verifica cumplimiento con OpenAPI 3.0
 - Valida referencias y tipos de datos
 
-#### 3. **Análisis de Seguridad** 🔒
+#### 3. **Análisis de Seguridad**
 - Escanea vulnerabilidades
 - Recomendaciones de seguridad
 - Detecta configuraciones inseguras
 
-#### 4. **Productividad** ⚡
+#### 4. **Productividad**
 - Autocompletado inteligente
 - Snippets de código
 - Ir a definición rápido
@@ -105,7 +105,7 @@ La extensión **Swagger Viewer (42Crunch)** en VS Code te permite:
 
 ---
 
-## 📥 Exportar Especificación
+## Exportar Especificación
 
 ### JSON
 ```bash
@@ -124,7 +124,7 @@ Invoke-WebRequest -Uri "http://localhost:8080/api/api-docs" -OutFile "openapi.js
 
 ---
 
-## 🤖 Generar Clientes Automáticamente
+## Generar Clientes Automáticamente
 
 ### JavaScript/TypeScript
 ```bash
@@ -144,7 +144,7 @@ openapi-generator-cli generate -i openapi.json -g java -o ./client
 
 ---
 
-## 🧪 Probar API con Swagger UI
+## Probar API con Swagger UI
 
 ### Ejemplo: Crear un curso
 
@@ -167,7 +167,7 @@ openapi-generator-cli generate -i openapi.json -g java -o ./client
 
 ---
 
-## 📦 Integración con Postman
+## Integración con Postman
 
 1. Abre Postman
 2. Click en **Import**
@@ -176,7 +176,7 @@ openapi-generator-cli generate -i openapi.json -g java -o ./client
 
 ---
 
-## 🎨 Personalización
+## Personalización
 
 ### Configuración actual en `application.properties`:
 
@@ -197,7 +197,7 @@ springdoc.swagger-ui.try-it-out-enabled=true
 
 ---
 
-## 📚 Recursos
+## Recursos
 
 ### Documentación Interna
 - Lee **SWAGGER_DOCUMENTATION.md** para guía completa
@@ -213,23 +213,23 @@ springdoc.swagger-ui.try-it-out-enabled=true
 
 ---
 
-## ✨ Beneficios
+## Beneficios
 
 ### Para ti:
-- ✅ Documentación automática y siempre actualizada
-- ✅ Pruebas de API sin herramientas adicionales
-- ✅ Exportación a múltiples formatos
-- ✅ Generación automática de clientes
+- Documentación automática y siempre actualizada
+- Pruebas de API sin herramientas adicionales
+- Exportación a múltiples formatos
+- Generación automática de clientes
 
 ### Para tu equipo:
-- ✅ Frontend puede ver contratos claros
-- ✅ QA puede automatizar pruebas
-- ✅ Nuevos miembros entienden la API rápidamente
-- ✅ Colaboración más eficiente
+- Frontend puede ver contratos claros
+- QA puede automatizar pruebas
+- Nuevos miembros entienden la API rápidamente
+- Colaboración más eficiente
 
 ---
 
-## 🎯 Próximos Pasos Sugeridos
+## Próximos Pasos Sugeridos
 
 1. **Prueba la documentación**
    - Inicia tu app
@@ -253,7 +253,7 @@ springdoc.swagger-ui.try-it-out-enabled=true
 
 ---
 
-## 🆘 Solución de Problemas
+## Solución de Problemas
 
 ### Swagger UI no carga
 ```bash
@@ -286,17 +286,17 @@ curl http://localhost:8080/api/actuator/health
 
 ---
 
-## 💡 Tips
+## Tips
 
-- 🔄 **Mantén la documentación actualizada**: Swagger se genera automáticamente
-- 📝 **Escribe buenas descripciones**: Son el valor real de la documentación
-- 🧪 **Usa "Try it out"**: Es la forma más rápida de probar endpoints
-- 📦 **Exporta regularmente**: Mantén una copia en tu repositorio
-- 🔍 **Usa 42Crunch**: Para validar y asegurar tu API
+- **Mantén la documentación actualizada**: Swagger se genera automáticamente
+- **Escribe buenas descripciones**: Son el valor real de la documentación
+- **Usa "Try it out"**: Es la forma más rápida de probar endpoints
+- **Exporta regularmente**: Mantén una copia en tu repositorio
+- **Usa 42Crunch**: Para validar y asegurar tu API
 
 ---
 
-## ✅ Checklist
+## Checklist
 
 - [x] Swagger configurado
 - [x] Todos los controladores documentados
@@ -308,7 +308,7 @@ curl http://localhost:8080/api/actuator/health
 
 ---
 
-**🎉 ¡Tu API está completamente documentada!**
+**¡Tu API está completamente documentada!**
 
 Ahora tienes una documentación profesional, interactiva y siempre actualizada para tu API REST de Gestión de Notas.
 

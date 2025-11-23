@@ -45,10 +45,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         // Permitir orígenes locales y producción
-        // ✅ ESPECIFICA TUS URLs EXACTAS
+        // ESPECIFICA TUS URLs EXACTAS
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "https://gestion-notas-frontend.onrender.com" // ⬅️ TU URL DE FRONTEND
+                "https://gestion-notas-frontend.onrender.com" // TU URL DE FRONTEND
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));

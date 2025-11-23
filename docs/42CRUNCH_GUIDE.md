@@ -1,12 +1,12 @@
 # Guía Rápida de Uso: Extensión Swagger (42Crunch)
 
-## 🎯 ¿Qué es 42Crunch Swagger Viewer?
+## ¿Qué es 42Crunch Swagger Viewer?
 
 Es una extensión de VS Code que te permite visualizar, validar y trabajar con especificaciones OpenAPI/Swagger directamente en tu editor.
 
 ---
 
-## 📥 Exportar tu API desde Spring Boot
+## Exportar tu API desde Spring Boot
 
 ### Opción 1: Descargar manualmente
 
@@ -30,7 +30,7 @@ Invoke-WebRequest -Uri "http://localhost:8080/api/v3/api-docs.yaml" -OutFile "op
 
 ---
 
-## 👁️ Visualizar tu API con la Extensión
+## Visualizar tu API con la Extensión
 
 ### Método 1: Preview Rápido
 
@@ -53,7 +53,7 @@ Invoke-WebRequest -Uri "http://localhost:8080/api/v3/api-docs.yaml" -OutFile "op
 
 ---
 
-## 🔍 Funciones Principales
+## Funciones Principales
 
 ### 1. Navegación Inteligente
 
@@ -75,11 +75,11 @@ Invoke-WebRequest -Uri "http://localhost:8080/api/v3/api-docs.yaml" -OutFile "op
 - Panel de "Problems" muestra todos los errores
 
 **Tipos de validación**:
-- ✅ Sintaxis JSON/YAML correcta
-- ✅ Cumplimiento con estándares OpenAPI 3.0
-- ✅ Referencias válidas (`$ref`)
-- ✅ Tipos de datos correctos
-- ✅ Campos requeridos presentes
+- Sintaxis JSON/YAML correcta
+- Cumplimiento con estándares OpenAPI 3.0
+- Referencias válidas (`$ref`)
+- Tipos de datos correctos
+- Campos requeridos presentes
 
 ### 3. Análisis de Seguridad
 
@@ -93,11 +93,11 @@ Invoke-WebRequest -Uri "http://localhost:8080/api/v3/api-docs.yaml" -OutFile "op
    - Recomendaciones de corrección
 
 **Problemas comunes detectados**:
-- 🔐 Falta de autenticación/autorización
-- 🔓 Endpoints sin validación
-- 📝 Información sensible expuesta
-- 🚫 CORS mal configurado
-- 📊 Rate limiting ausente
+- Falta de autenticación/autorización
+- Endpoints sin validación
+- Información sensible expuesta
+- CORS mal configurado
+- Rate limiting ausente
 
 ### 4. Autocompletado
 
@@ -109,7 +109,7 @@ Invoke-WebRequest -Uri "http://localhost:8080/api/v3/api-docs.yaml" -OutFile "op
 
 ---
 
-## 🎨 Personalizar la Vista
+## Personalizar la Vista
 
 ### Configuración de la Extensión
 
@@ -137,7 +137,7 @@ Invoke-WebRequest -Uri "http://localhost:8080/api/v3/api-docs.yaml" -OutFile "op
 
 ---
 
-## 🛠️ Casos de Uso Prácticos
+## Casos de Uso Prácticos
 
 ### Caso 1: Documentar Nuevo Endpoint
 
@@ -167,12 +167,12 @@ Invoke-WebRequest -Uri "http://localhost:8080/api/v3/api-docs.yaml" -OutFile "op
 **La extensión te ayuda a encontrar**:
 
 ```yaml
-# ❌ Problema: Falta descripción
+# Problema: Falta descripción
 /api/cursos:
   get:
     summary: Get courses
 
-# ✅ Solución: Agregar descripción
+# Solución: Agregar descripción
 /api/cursos:
   get:
     summary: Obtener todos los cursos
@@ -181,7 +181,7 @@ Invoke-WebRequest -Uri "http://localhost:8080/api/v3/api-docs.yaml" -OutFile "op
 
 ---
 
-## 🔗 Integración con Git
+## Integración con Git
 
 ### Guardar la Especificación en el Repo
 
@@ -208,7 +208,7 @@ gestion-notas-backend/
 curl -f http://localhost:8080/api/v3/api-docs > docs/api/openapi.json
 curl -f http://localhost:8080/api/v3/api-docs.yaml > docs/api/openapi.yaml
 
-echo "✅ Especificación OpenAPI actualizada"
+echo "Especificación OpenAPI actualizada"
 ```
 
 **PowerShell version**:
@@ -219,12 +219,12 @@ echo "✅ Especificación OpenAPI actualizada"
 Invoke-WebRequest -Uri "http://localhost:8080/api/v3/api-docs" -OutFile "docs/api/openapi.json"
 Invoke-WebRequest -Uri "http://localhost:8080/api/v3/api-docs.yaml" -OutFile "docs/api/openapi.yaml"
 
-Write-Host "✅ Especificación OpenAPI actualizada" -ForegroundColor Green
+Write-Host "Especificación OpenAPI actualizada" -ForegroundColor Green
 ```
 
 ---
 
-## 📊 Comparar Versiones de API
+## Comparar Versiones de API
 
 ### Detectar Cambios (Breaking Changes)
 
@@ -251,7 +251,7 @@ oasdiff breaking openapi-v1.0.json openapi-v1.1.json
 
 ---
 
-## 🚀 Comandos Rápidos
+## Comandos Rápidos
 
 ### Atajos de Teclado
 
@@ -266,7 +266,7 @@ oasdiff breaking openapi-v1.0.json openapi-v1.1.json
 
 ---
 
-## 🎓 Tips y Trucos
+## Tips y Trucos
 
 ### 1. Live Reload
 
@@ -289,7 +289,7 @@ if [ -f "docs/api/openapi.json" ]; then
     npx @apidevtools/swagger-cli validate docs/api/openapi.json
     
     if [ $? -ne 0 ]; then
-        echo "❌ Especificación OpenAPI inválida"
+        echo "Especificación OpenAPI inválida"
         exit 1
     fi
 fi
@@ -324,7 +324,7 @@ Crea snippets para componentes comunes:
 
 ---
 
-## 🔥 Características Avanzadas
+## Características Avanzadas
 
 ### 1. Linting Personalizado
 
@@ -366,7 +366,7 @@ dredd docs/api/openapi.yaml http://localhost:8080
 
 ---
 
-## 🎯 Checklist de Mejores Prácticas
+## Checklist de Mejores Prácticas
 
 - [ ] Especificación OpenAPI en el repositorio
 - [ ] Preview revisado antes de cada commit
@@ -379,7 +379,7 @@ dredd docs/api/openapi.yaml http://localhost:8080
 
 ---
 
-## 📚 Recursos Útiles
+## Recursos Útiles
 
 - **Documentación 42Crunch**: https://docs.42crunch.com/
 - **OpenAPI Guide**: https://oai.github.io/Documentation/
@@ -388,4 +388,4 @@ dredd docs/api/openapi.yaml http://localhost:8080
 
 ---
 
-¡Ahora tienes todas las herramientas para documentar y mantener tu API profesionalmente! 🚀
+¡Ahora tienes todas las herramientas para documentar y mantener tu API profesionalmente!
