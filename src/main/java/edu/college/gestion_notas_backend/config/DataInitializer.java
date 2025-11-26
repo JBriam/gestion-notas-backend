@@ -93,7 +93,7 @@ public class DataInitializer implements CommandLineRunner {
                 "González Silva",
                 "maria.gonzalez@colegio.edu.pe",
                 "999888666",
-                "Ciencias"
+                "Ciencias Sociales"
             );
 
             Docente docente3 = crearDocente(
@@ -102,7 +102,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Martínez López",
                 "jose.martinez@colegio.edu.pe",
                 "999888555",
-                "Historia"
+                "Ciencia y Tecnología"
             );
 
             log.info("{} docentes creados", 3);
@@ -114,8 +114,7 @@ public class DataInitializer implements CommandLineRunner {
                 "García Torres",
                 "ana.garcia@estudiante.edu.pe",
                 "987654321",
-                "Av. Principal 123",
-                "12345678"
+                "Av. Principal 123"
             );
 
             Estudiante estudiante2 = crearEstudiante(
@@ -124,8 +123,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Fernández Ruiz",
                 "luis.fernandez@estudiante.edu.pe",
                 "987654322",
-                "Jr. Secundaria 456",
-                "87654321"
+                "Jr. Secundaria 456"
             );
 
             Estudiante estudiante3 = crearEstudiante(
@@ -134,8 +132,7 @@ public class DataInitializer implements CommandLineRunner {
                 "López Mendoza",
                 "carmen.lopez@estudiante.edu.pe",
                 "987654323",
-                "Calle Tercera 789",
-                "11223344"
+                "Calle Tercera 789"
             );
 
             Estudiante estudiante4 = crearEstudiante(
@@ -144,8 +141,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Sánchez Vega",
                 "pedro.sanchez@estudiante.edu.pe",
                 "987654324",
-                "Av. Los Olivos 321",
-                "44332211"
+                "Av. Los Olivos 321"
             );
 
             log.info("{} estudiantes creados", 4);
@@ -202,7 +198,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private Estudiante crearEstudiante(String codigo, String nombres, String apellidos,
-                                       String email, String telefono, String direccion, String dniDocumento) {
+                                       String email, String telefono, String direccion) {
         try {
             // Crear usuario
             Usuario usuario = Usuario.builder()
