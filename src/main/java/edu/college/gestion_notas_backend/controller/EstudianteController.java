@@ -271,15 +271,16 @@ public class EstudianteController {
                     .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
 
             // Procesar foto si existe
-            String rutaFoto = estudianteActual.getFoto(); // Mantener foto actual por defecto
+            String rutaFoto = null; // Solo actualizar si se sube una nueva foto
             if (perfilDTO.getFoto() != null && !perfilDTO.getFoto().isEmpty()) {
                 // Eliminar foto anterior si existe
-                if (rutaFoto != null && !rutaFoto.isEmpty()) {
+                String fotoAnterior = estudianteActual.getFoto();
+                if (fotoAnterior != null && !fotoAnterior.isEmpty()) {
                     try {
-                        fileStorageService.deleteFile(rutaFoto, "estudiantes");
-                        System.out.println("Foto anterior eliminada: " + rutaFoto);
+                        fileStorageService.deleteFile(fotoAnterior, "estudiantes");
+                        System.out.println("Foto anterior eliminada: " + fotoAnterior);
                     } catch (Exception e) {
-                        System.err.println("No se pudo eliminar foto anterior: " + rutaFoto);
+                        System.err.println("No se pudo eliminar foto anterior: " + fotoAnterior);
                     }
                 }
                 // Guardar nueva foto
