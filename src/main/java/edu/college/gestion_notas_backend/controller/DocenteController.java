@@ -274,15 +274,36 @@ public class DocenteController {
         @ApiResponse(responseCode = "200", description = "Perfil actualizado exitosamente"),
         @ApiResponse(responseCode = "404", description = "Docente no encontrado")
     })
-    @PutMapping("/{id}/perfil")
+    @PutMapping(value = "/{id}/perfil", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DocenteResponseDTO> actualizarPerfilDocente(
             @Parameter(description = "ID del docente", required = true) @PathVariable Integer id,
-            @Valid @RequestBody ActualizarPerfilDocenteDTO perfilDTO) {
+            @Valid @ModelAttribute ActualizarPerfilDocenteDTO perfilDTO) {
         try {
+            // Obtener docente actual
+            Docente docenteActual = docenteService.obtenerDocentePorId(id)
+                    .orElseThrow(() -> new RuntimeException("Docente no encontrado con ID: " + id));
+
+            // Procesar foto si existe
+            String rutaFoto = docenteActual.getFoto(); // Mantener foto actual por defecto
+            if (perfilDTO.getFoto() != null && !perfilDTO.getFoto().isEmpty()) {
+                // Eliminar foto anterior si existe
+                if (rutaFoto != null && !rutaFoto.isEmpty()) {
+                    try {
+                        fileStorageService.deleteFile(rutaFoto, "docentes");
+                        System.out.println("Foto anterior eliminada: " + rutaFoto);
+                    } catch (Exception e) {
+                        System.err.println("No se pudo eliminar foto anterior: " + rutaFoto);
+                    }
+                }
+                // Guardar nueva foto
+                rutaFoto = fileStorageService.storeFile(perfilDTO.getFoto(), "docentes");
+                System.out.println("Nueva foto guardada en: " + rutaFoto);
+            }
+
             Docente docente = docenteService.actualizarPerfilDocente(
                     id, perfilDTO.getNombres(), perfilDTO.getApellidos(), perfilDTO.getTelefono(),
                     perfilDTO.getDireccion(), perfilDTO.getDistrito(),
-                    perfilDTO.getFoto(), perfilDTO.getEspecialidad(), perfilDTO.getFechaContratacion(),
+                    rutaFoto, perfilDTO.getEspecialidad(), perfilDTO.getFechaContratacion(),
                     perfilDTO.getEmail());
             return ResponseEntity.ok(convertirADTO(docente));
         } catch (RuntimeException e) {

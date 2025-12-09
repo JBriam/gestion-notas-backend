@@ -261,14 +261,34 @@ public class EstudianteController {
         @ApiResponse(responseCode = "200", description = "Perfil actualizado exitosamente"),
         @ApiResponse(responseCode = "404", description = "Estudiante no encontrado")
     })
-    @PutMapping("/{id}/perfil")
+    @PutMapping(value = "/{id}/perfil", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<EstudianteResponseDTO> actualizarPerfilEstudiante(
             @Parameter(description = "ID del estudiante", required = true) @PathVariable Integer id,
-            @Valid @RequestBody ActualizarPerfilEstudianteDTO perfilDTO) {
+            @Valid @ModelAttribute ActualizarPerfilEstudianteDTO perfilDTO) {
         try {
-            Estudiante estudiante = estudianteService.actualizarPerfilEstudiante(
+            // Obtener estudiante actual
+            Estudiante estudianteActual = estudianteService.obtenerEstudiantePorId(id)
+                    .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
+
+            // Procesar foto si existe
+            String rutaFoto = estudianteActual.getFoto(); // Mantener foto actual por defecto
+            if (perfilDTO.getFoto() != null && !perfilDTO.getFoto().isEmpty()) {
+                // Eliminar foto anterior si existe
+                if (rutaFoto != null && !rutaFoto.isEmpty()) {
+                    try {
+                        fileStorageService.deleteFile(rutaFoto, "estudiantes");
+                        System.out.println("Foto anterior eliminada: " + rutaFoto);
+                    } catch (Exception e) {
+                        System.err.println("No se pudo eliminar foto anterior: " + rutaFoto);
+                    }
+                }
+                // Guardar nueva foto
+                rutaFoto = fileStorageService.storeFile(perfilDTO.getFoto(), "estudiantes");
+                System.out.println("Nueva foto guardada en: " + rutaFoto);
+            }
+                    Estudiante estudiante = estudianteService.actualizarPerfilEstudiante(
                     id, perfilDTO.getNombres(), perfilDTO.getApellidos(), perfilDTO.getTelefono(),
-                    perfilDTO.getDireccion(), perfilDTO.getDistrito(), perfilDTO.getFoto(),
+                    perfilDTO.getDireccion(), perfilDTO.getDistrito(), rutaFoto,
                     perfilDTO.getFechaNacimiento(), perfilDTO.getEmail());
             return ResponseEntity.ok(convertirADTO(estudiante));
         } catch (RuntimeException e) {
