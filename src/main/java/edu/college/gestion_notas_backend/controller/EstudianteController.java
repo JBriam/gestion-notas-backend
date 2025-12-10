@@ -283,6 +283,53 @@ public class EstudianteController {
         }
     }
 
+    @Operation(
+        summary = "Actualizar foto del estudiante",
+        description = "Actualiza solo la foto de perfil del estudiante."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Foto actualizada exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Archivo inválido"),
+        @ApiResponse(responseCode = "404", description = "Estudiante no encontrado")
+    })
+    @PutMapping(value = "/{id}/foto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<EstudianteResponseDTO> actualizarFotoEstudiante(
+            @Parameter(description = "ID del estudiante", required = true) @PathVariable Integer id,
+            @RequestParam("foto") org.springframework.web.multipart.MultipartFile foto) {
+        try {
+            // Obtener estudiante actual
+            Estudiante estudianteActual = estudianteService.obtenerEstudiantePorId(id)
+                    .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
+
+            if (foto == null || foto.isEmpty()) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            // Eliminar foto anterior si existe
+            String fotoAnterior = estudianteActual.getFoto();
+            if (fotoAnterior != null && !fotoAnterior.isEmpty()) {
+                try {
+                    fileStorageService.deleteFile(fotoAnterior, "estudiantes");
+                    System.out.println("Foto anterior eliminada: " + fotoAnterior);
+                } catch (Exception e) {
+                    System.err.println("No se pudo eliminar foto anterior: " + fotoAnterior);
+                }
+            }
+
+            // Guardar nueva foto
+            String rutaFoto = fileStorageService.storeFile(foto, "estudiantes");
+            System.out.println("Nueva foto guardada en: " + rutaFoto);
+
+            // Actualizar solo la foto del estudiante usando el service
+            Estudiante estudianteActualizado = estudianteService.actualizarPerfilEstudiante(
+                    id, null, null, null, null, null, rutaFoto, null, null);
+
+            return ResponseEntity.ok(convertirADTO(estudianteActualizado));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     // Actualizar estudiante completo (multipart con foto o sin foto)
     
     // Actualizar estudiante completo

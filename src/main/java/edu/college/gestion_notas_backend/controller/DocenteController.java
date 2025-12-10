@@ -297,6 +297,53 @@ public class DocenteController {
         }
     }
 
+    @Operation(
+        summary = "Actualizar foto del docente",
+        description = "Actualiza solo la foto de perfil del docente."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Foto actualizada exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Archivo inválido"),
+        @ApiResponse(responseCode = "404", description = "Docente no encontrado")
+    })
+    @PutMapping(value = "/{id}/foto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<DocenteResponseDTO> actualizarFotoDocente(
+            @Parameter(description = "ID del docente", required = true) @PathVariable Integer id,
+            @RequestParam("foto") org.springframework.web.multipart.MultipartFile foto) {
+        try {
+            // Obtener docente actual
+            Docente docenteActual = docenteService.obtenerDocentePorId(id)
+                    .orElseThrow(() -> new RuntimeException("Docente no encontrado con ID: " + id));
+
+            if (foto == null || foto.isEmpty()) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            // Eliminar foto anterior si existe
+            String fotoAnterior = docenteActual.getFoto();
+            if (fotoAnterior != null && !fotoAnterior.isEmpty()) {
+                try {
+                    fileStorageService.deleteFile(fotoAnterior, "docentes");
+                    System.out.println("Foto anterior eliminada: " + fotoAnterior);
+                } catch (Exception e) {
+                    System.err.println("No se pudo eliminar foto anterior: " + fotoAnterior);
+                }
+            }
+
+            // Guardar nueva foto
+            String rutaFoto = fileStorageService.storeFile(foto, "docentes");
+            System.out.println("Nueva foto guardada en: " + rutaFoto);
+
+            // Actualizar solo la foto del docente usando el service
+            Docente docenteActualizado = docenteService.actualizarPerfilDocente(
+                    id, null, null, null, null, null, rutaFoto, null, null, null);
+
+            return ResponseEntity.ok(convertirADTO(docenteActualizado));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     // Actualizar docente completo
     @Operation(
         summary = "Actualizar un docente",
