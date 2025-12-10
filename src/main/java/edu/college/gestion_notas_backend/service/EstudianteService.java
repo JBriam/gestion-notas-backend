@@ -19,6 +19,7 @@ public class EstudianteService {
     
     private final EstudianteRepository estudianteRepository;
     private final UsuarioService usuarioService;
+    private final FileStorageService fileStorageService;
     
     // Crear estudiante
     public Estudiante crearEstudiante(Estudiante estudiante) {
@@ -126,6 +127,29 @@ public class EstudianteService {
         }
         
         return estudianteRepository.save(estudiante);
+    }
+
+    // Actualizar foto del estudiante
+    public Estudiante actualizarFoto(Integer id, org.springframework.web.multipart.MultipartFile foto) {
+        Estudiante estudiante = estudianteRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Estudiante no encontrado con ID: " + id));
+        
+        try {
+            // Eliminar foto anterior si existe
+            if (estudiante.getFoto() != null && !estudiante.getFoto().isEmpty()) {
+                fileStorageService.deleteFile(estudiante.getFoto(), "estudiantes");
+            }
+            
+            // Guardar el archivo
+            String nombreArchivo = fileStorageService.storeFile(foto, "estudiantes");
+            
+            // Actualizar la ruta de la foto en el estudiante
+            estudiante.setFoto(nombreArchivo);
+            
+            return estudianteRepository.save(estudiante);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al procesar la foto: " + e.getMessage(), e);
+        }
     }
     
     // Eliminar estudiante

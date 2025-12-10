@@ -406,6 +406,44 @@ public class EstudianteController {
         return ResponseEntity.ok(estadisticas);
     }
 
+    @Operation(summary = "Actualizar foto de perfil del estudiante")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Foto actualizada exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Archivo inválido o estudiante no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error al guardar la foto")
+    })
+    @PutMapping(value = "/{id}/foto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> actualizarFoto(
+            @PathVariable Integer id,
+            @RequestParam("foto") org.springframework.web.multipart.MultipartFile foto) {
+        try {
+            if (foto.isEmpty()) {
+                return ResponseEntity.badRequest().body("El archivo de foto no puede estar vacío");
+            }
+
+            // Validar tipo de archivo
+            String contentType = foto.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return ResponseEntity.badRequest().body("El archivo debe ser una imagen (JPEG, PNG, etc.)");
+            }
+
+            // Validar tamaño máximo (5MB)
+            if (foto.getSize() > 5 * 1024 * 1024) {
+                return ResponseEntity.badRequest().body("El tamaño máximo permitido es 5MB");
+            }
+
+            // Actualizar foto del estudiante
+            Estudiante estudianteActualizado = estudianteService.actualizarFoto(id, foto);
+            return ResponseEntity.ok(convertirADTO(estudianteActualizado));
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar la foto: " + e.getMessage());
+        }
+    }
+
     // Método de conversión
     private EstudianteResponseDTO convertirADTO(Estudiante estudiante) {
         // Construir URL completa de la foto si existe
